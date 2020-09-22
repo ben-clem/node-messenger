@@ -1,5 +1,5 @@
 # Messenger app school project
-by Benoît Clemenceau for Adaltas [ece-nodejs course](https://github.com/adaltas/ece-nodejs).
+by Benoît Clemenceau and Marin Neyret for Adaltas [ece-nodejs course](https://github.com/adaltas/ece-nodejs).
 
 The goal is to build a basic Node.js messaging web app.
 
