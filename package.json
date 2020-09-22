@@ -1,0 +1,20 @@
+{
+  "name": "node-messenger",
+  "version": "0.0.0",
+  "description": "WebTech project",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha 'test/**/*.js'"
+  },
+  "keywords": [
+    "ece",
+    "web",
+    "lab"
+  ],
+  "author": "benzinho <benoit.clemenceau.zer@gmail.com",
+  "license": "MIT",
+
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
