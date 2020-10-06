@@ -7,16 +7,16 @@ const app = express()
 const port = 3000
 
 const content = '<!DOCTYPE html>' +
-'<html>' +
-'    <head>' +
-'        <meta charset="utf-8" />' +
-'        <title>Lab 1 root</title>' +
-'    </head>' +
-'    <body>' +
-'         <p>Page d\'accueil</p>' +
-'         <p>SI / OCRES / hello/usr</p>' +
-'    </body>' +
-'</html>'
+  '<html>' +
+  '    <head>' +
+  '        <meta charset="utf-8" />' +
+  '        <title>Lab 1 root</title>' +
+  '    </head>' +
+  '    <body>' +
+  '         <p>Page d\'accueil</p>' +
+  '         <p>SI / OCRES / hello/usr</p>' +
+  '    </body>' +
+  '</html>'
 
 
 app.get('/', (req, res) => {
@@ -31,7 +31,7 @@ app.get('/OCRES', (req, res) => {
   res.send('Channel OCRES')
 })
 
-app.get('/hello/:usr', function(req,res) {
+app.get('/hello/:usr', function(req, res) {
   var response = req.params['usr'];
 
   res.send('Hello ' + response)

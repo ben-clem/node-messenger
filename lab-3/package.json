@@ -1,8 +1,34 @@
 {
   "name": "lab-3",
   "version": "0.0.0",
-  "description": "WebTech lab 3",
-  "author": "benzinho <benoit.clemenceau.zer@gmail.com>",
+  "description": "WebTech project lab 3",
+  "keywords": [
+    "ece",
+    "web",
+    "lab"
+  ],
+  "homepage": "https://github.com/benzinho75/node-messenger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benzinho75/node-messenger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benzinho75/node-messenger/issues",
+    "email": "b.clemenceau.pro@gmail.com"
+  },
+  "license": "MIT",
+  "author": "Benoît Clemenceau <b.clemenceau.pro@gmail.com> (https://github.com/benzinho75)",
+  "contributors": [
+    "Marin Neyret <marin.nyrt@gmail.com> (https://github.com/MARINeyret)"
+  ],
+  "main": "",
+  "scripts": {
+    "test": "mocha test/**/*.js"
+  },
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
@@ -15,13 +41,6 @@
   "devDependencies": {
     "mocha": "^8.1.3"
   },
-  "keywords": [
-    "tech",
-    "ece",
-    "nodejs"
-  ],
-  "license": "MIT",
-  "main": "./lib/index.js",
   "mocha": {
     "throw-deprecation": true,
     "require": [
@@ -31,8 +50,5 @@
     "timeout": 40000,
     "reporter": "spec",
     "recursive": true
-  },
-  "scripts": {
-    "test": "mocha 'test/**/*.js'"
   }
 }
