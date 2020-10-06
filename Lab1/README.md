@@ -8,3 +8,11 @@ The goal is to build a basic Node.js messaging web app.
 - Channel creation
 - Inviting other users
 - Notifications
+
+## Installation
+
+fefefe
+
+## Authors
+Benoît Clemenceau
+Marin Neyret
