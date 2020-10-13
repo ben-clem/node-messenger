@@ -32,14 +32,14 @@ describe('users', () => {
   it('list one element', async () => {
     // Create a user
     await supertest(app)
-      .post('/users')
-      .send({ username: 'user_1' })
+    .post('/users')
+    .send({username: 'user_1'})
     // Ensure we list the users correctly
-    const { body: users } = await supertest(app)
-      .get('/users')
-      .expect(200)
+    const {body: users} = await supertest(app)
+    .get('/users')
+    .expect(200)
     users.should.match([{
-      id: /^\w+-\w+-\w+-\w+-\w+$/,
+      id: /^users:\w+-\w+-\w+-\w+-\w+$/,
       username: 'user_1'
     }])
   })

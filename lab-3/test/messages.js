@@ -20,45 +20,42 @@ describe('messages', () => {
     messages.should.match([])
   })
 
-  it('add one element', async () => {
+  it('list one element', async () => {
     // Create a channel
-    const { body: channel } = await supertest(app)
-      .post('/channels')
-      .send({ name: 'channel 1' })
-    // Create a message inside it
-    const { body: message } = await supertest(app)
-      .post(`/channels/${channel.id}/messages`)
-      .send({ content: 'Hello ECE' })
-      .expect(201)
-    message.should.match({
-      creation: (it) => it.should.be.approximately(Date.now(), 1000),
-      content: 'Hello ECE'
-    })
-    // Check it was correctly inserted
-    const { body: messages } = await supertest(app)
-      .get(`/channels/${channel.id}/messages`)
-    messages.length.should.eql(1)
-  })
-
-  it('list one message', async () => {
-    // Create a channel
-    const { body: channel } = await supertest(app)
-      .post('/channels')
-      .send({ name: 'channel 1' })
+    const {body: channel} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 1'})
     // and a message inside it
     await supertest(app)
-      .post(`/channels/${channel.id}/messages`)
-      .send({ content: 'Hello ECE' })
+    .post(`/channels/${channel.id}/messages`)
+    .send({content: 'Hello ECE'})
     // Get messages
-    const { body: messages } = await supertest(app)
-      .get(`/channels/${channel.id}/messages`)
-      .expect(200)
+    const {body: messages} = await supertest(app)
+    .get(`/channels/${channel.id}/messages`)
+    .expect(200)
     messages.should.match([{
       creation: (it) => it.should.be.approximately(Date.now(), 1000),
       content: 'Hello ECE'
     }])
   })
-
-
-
+  
+  it('add one element', async () => {
+    // Create a channel
+    const {body: channel} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 1'})
+    // Create a message inside it
+    const {body: message} = await supertest(app)
+    .post(`/channels/${channel.id}/messages`)
+    .send({content: 'Hello ECE'})
+    .expect(201)
+    message.should.match({
+      creation: (it) => it.should.be.approximately(Date.now(), 1000),
+      content: 'Hello ECE'
+    })
+    // Check it was correctly inserted
+    const {body: messages} = await supertest(app)
+    .get(`/channels/${channel.id}/messages`)
+    messages.length.should.eql(1)
+  })
 })
