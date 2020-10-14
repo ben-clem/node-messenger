@@ -18,6 +18,8 @@ app.get('/channels', async (req, res) => {
   res.json(channels) //On renvoie du json en sortie
 })
 
+// TEST GIT MARIN
+
 //Créer un channel
 app.post('/channels', async (req, res) => {
   const channel = await db.channels.create(req.body)
