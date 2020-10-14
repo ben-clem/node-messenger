@@ -1,61 +1,63 @@
-const supertest = require('supertest')
-const app = require('../lib/app')
-const db = require('../lib/db')
+const supertest = require("supertest");
+const app = require("../lib/app");
+const db = require("../lib/db");
 
-describe('messages', () => {
-
+describe("messages", () => {
   beforeEach(async () => {
-    await db.admin.clear()
-  })
+    await db.admin.clear();
+  });
 
-  it('list empty', async () => {
+  it("list empty", async () => {
     // Create a channel
     const { body: channel } = await supertest(app)
-      .post('/channels')
-      .send({ name: 'channel 1' })
+      .post("/channels")
+      .send({ name: "channel 1" });
     // Get messages
     const { body: messages } = await supertest(app)
       .get(`/channels/${channel.id}/messages`)
-      .expect(200)
-    messages.should.match([])
-  })
+      .expect(200);
+    messages.should.match([]);
+  });
 
-  it('list one element', async () => {
+  it("list one element", async () => {
     // Create a channel
     const { body: channel } = await supertest(app)
-      .post('/channels')
-      .send({ name: 'channel 1' })
+      .post("/channels")
+      .send({ name: "channel 1" });
     // and a message inside it
     await supertest(app)
       .post(`/channels/${channel.id}/messages`)
-      .send({ content: 'Hello ECE' })
+      .send({ content: "Hello ECE" });
     // Get messages
     const { body: messages } = await supertest(app)
       .get(`/channels/${channel.id}/messages`)
-      .expect(200)
-    messages.should.match([{
-      creation: (it) => it.should.be.approximately(Date.now(), 1000),
-      content: 'Hello ECE'
-    }])
-  })
+      .expect(200);
+    messages.should.match([
+      {
+        creation: (it) => it.should.be.approximately(Date.now(), 1000),
+        content: "Hello ECE",
+      },
+    ]);
+  });
 
-  it('add one element', async () => {
+  it("add one element", async () => {
     // Create a channel
     const { body: channel } = await supertest(app)
-      .post('/channels')
-      .send({ name: 'channel 1' })
+      .post("/channels")
+      .send({ name: "channel 1" });
     // Create a message inside it
     const { body: message } = await supertest(app)
       .post(`/channels/${channel.id}/messages`)
-      .send({ content: 'Hello ECE' })
-      .expect(201)
+      .send({ content: "Hello ECE" })
+      .expect(201);
     message.should.match({
       creation: (it) => it.should.be.approximately(Date.now(), 1000),
-      content: 'Hello ECE'
-    })
+      content: "Hello ECE",
+    });
     // Check it was correctly inserted
-    const { body: messages } = await supertest(app)
-      .get(`/channels/${channel.id}/messages`)
-    messages.length.should.eql(1)
-  })
-})
+    const { body: messages } = await supertest(app).get(
+      `/channels/${channel.id}/messages`
+    );
+    messages.length.should.eql(1);
+  });
+});
