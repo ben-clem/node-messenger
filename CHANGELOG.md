@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Lab 3 finished (all tests passing)
 - Lab 4: Intro tutorial to React
+- Lab 4: simple messenger using functional component and hooks
 
 ### TODO
-- Add a second part to lab 4 (using hooks): a form to send messages and list all messages sent
 - Reorganize project (back-end folder with labs 1, 2, 3, front-end folder with following ones)
 
 

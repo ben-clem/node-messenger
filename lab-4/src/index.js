@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
@@ -146,4 +146,73 @@ function calculateWinner(squares) {
 
 // ========================================
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+function Messenger(props) {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState(Array);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    let date = new Date();
+    date = date.toLocaleTimeString();
+    setMessages([...messages, { date, message }]);
+
+    setMessage(""); // reset message to clear the input field
+  };
+
+  const listMessages = messages.map((msg) => (
+    <div>
+      <span style={{
+          fontSize: "75%",
+          marginLeft: "5px"
+        }}>
+        {msg.date} ={">"}
+      </span>
+      <span>
+      {" "}{msg.message}
+      </span>
+    </div>
+  ));
+
+  return (
+    <div>
+      <br></br>
+      <hr></hr>
+      <h4>Messenger</h4>
+
+      <div
+        style={{
+          border: "solid 1px black",
+          marginLeft: "5px",
+          marginRight: "50%",
+          height: "200px",
+        }}
+      >
+        {listMessages}
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ margin: "5px" }}>
+        <label>
+          <span style={{ margin: "5px" }}>Speak:</span>
+          <input
+            type="text"
+            id="field"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        </label>
+        <input type="submit" value="Submit" style={{ margin: "5px" }} />
+      </form>
+    </div>
+  );
+}
+
+// ========================================
+
+ReactDOM.render(
+  <div>
+    <Game />
+    <Messenger />
+  </div>,
+  document.getElementById("root")
+);
