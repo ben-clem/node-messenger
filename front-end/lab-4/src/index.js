@@ -148,12 +148,12 @@ function calculateWinner(squares) {
 
 function Messenger(props) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState(Array);
+  const [messages, setMessages] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    let date = new Date();
+    let date = new Date();  // date will be determined server-side in the future to prevent forgery 
     date = date.toLocaleTimeString();
     setMessages([...messages, { date, message }]);
 
@@ -162,15 +162,15 @@ function Messenger(props) {
 
   const listMessages = messages.map((msg) => (
     <div>
-      <span style={{
+      <span
+        style={{
           fontSize: "75%",
-          marginLeft: "5px"
-        }}>
+          marginLeft: "5px",
+        }}
+      >
         {msg.date} ={">"}
       </span>
-      <span>
-      {" "}{msg.message}
-      </span>
+      <span>{msg.message}</span>
     </div>
   ));
 
