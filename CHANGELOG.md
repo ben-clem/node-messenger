@@ -16,8 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lab 4: Intro tutorial to React
 
 ### TODO
-- Refactor lab 4 with hooks
-- Add a second part to lab 4: a form to send messages and list all messages sent
+- Add a second part to lab 4 (using hooks): a form to send messages and list all messages sent
 - Reorganize project (back-end folder with labs 1, 2, 3, front-end folder with following ones)
 
 
