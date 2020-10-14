@@ -9,15 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/benzinho75/node-messenger/compare/v0.0.2...HEAD)
 
 
-## [0.0.3-WIP](https://github.com/benzinho75/node-messenger/compare/v0.0.2...v0.0.3) - ?
+## [0.0.3](https://github.com/benzinho75/node-messenger/compare/v0.0.2...v0.0.3) - 2020-10-14
 
 ### Added
 - Lab 3 finished (all tests passing)
 - Lab 4: Intro tutorial to React
 - Lab 4: simple messenger using functional component and hooks
 
-### TODO
-- Reorganize project (back-end folder with labs 1, 2, 3, front-end folder with following ones)
+### Changed
+- Reorganized repo
 
 
 ## [0.0.2](https://github.com/benzinho75/node-messenger/compare/v0.0.1...v0.0.2) - 2020-10-07
