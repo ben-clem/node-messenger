@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import App from "./App.js";
 
 function Square(props) {
   return (
@@ -108,16 +110,24 @@ class Game extends React.Component {
     }
 
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
-          />
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+      <div style={{margin: "25px"}}>
+        <h4>
+          Tic-Tac-Toe game from{" "}
+          <a href="https://reactjs.org/tutorial/tutorial.html">
+            React Intro Tutorial
+          </a>
+        </h4>
+        <div className="game">
+          <div className="game-board">
+            <Board
+              squares={current.squares}
+              onClick={(i) => this.handleClick(i)}
+            />
+          </div>
+          <div className="game-info">
+            <div>{status}</div>
+            <ol>{moves}</ol>
+          </div>
         </div>
       </div>
     );
@@ -153,7 +163,7 @@ function Messenger(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    let date = new Date();  // date will be determined server-side in the future to prevent forgery 
+    let date = new Date(); // date will be determined server-side in the future to prevent forgery
     date = date.toLocaleTimeString();
     setMessages([...messages, { date, message }]);
 
@@ -168,17 +178,17 @@ function Messenger(props) {
           marginLeft: "5px",
         }}
       >
-        {msg.date} ={">"}
+        {msg.date} ={"> "}
       </span>
       <span>{msg.message}</span>
     </div>
   ));
 
   return (
-    <div>
+    <div style={{margin: "20px"}}>
       <br></br>
       <hr></hr>
-      <h4>Messenger</h4>
+      <h4>Simple Messenger using functionnal components and hooks</h4>
 
       <div
         style={{
@@ -203,6 +213,11 @@ function Messenger(props) {
         </label>
         <input type="submit" value="Submit" style={{ margin: "5px" }} />
       </form>
+      <br></br>
+      <Link to="/App">
+        Another example using DOM modification instead of state modification for
+        input field reset + CSS-in-JS w/ Emotion
+      </Link>
     </div>
   );
 }
@@ -210,9 +225,18 @@ function Messenger(props) {
 // ========================================
 
 ReactDOM.render(
-  <div>
-    <Game />
-    <Messenger />
-  </div>,
+  <Router>
+    <div>
+      <Switch>
+        <Route exact path="/">
+          <Game />
+          <Messenger />
+        </Route>
+        <Route exact path="/App">
+          <App />
+        </Route>
+      </Switch>
+    </div>
+  </Router>,
   document.getElementById("root")
 );
