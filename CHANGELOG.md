@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [WIP](https://github.com/benzinho75/node-messenger/compare/v0.0.3...v0.0.4) - ?
 
 ### Added
-Lab 4: other messenger example using DOM modification instead of state modification for input field reset + CSS-in-JS w/ Emotion
-Lab 4: declarative routing with React Router
+- Lab 4: other messenger example using DOM modification instead of state modification for input field reset + CSS-in-JS w/ Emotion
+- Lab 4: declarative routing with React Router
 
 ## [0.0.3](https://github.com/benzinho75/node-messenger/compare/v0.0.2...v0.0.3) - 2020-10-14
 
