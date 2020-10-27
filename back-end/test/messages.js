@@ -37,7 +37,8 @@ describe('messages', () => {
     .expect(200)
     messages.should.match([{
       author: 'whoami',
-      creation: (it) => it.should.be.approximately(microtime.now(), 10000),
+      channelId: /^\w+-\w+-\w+-\w+-\w+$/,
+      creation: (it) => it.should.be.approximately(microtime.now(), 100000),
       content: 'Hello ECE'
     }])
   })
