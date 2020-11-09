@@ -37,8 +37,7 @@ describe('messages', () => {
     .expect(200)
     messages.should.match([{
       author: 'whoami',
-      channelId: /^\w+-\w+-\w+-\w+-\w+$/,
-      creation: (it) => it.should.be.approximately(microtime.now(), 100000),
+      creation: (it) => it.should.be.approximately(microtime.now(), 1000000),
       content: 'Hello ECE'
     }])
   })
@@ -55,7 +54,7 @@ describe('messages', () => {
     .expect(201)
     message.should.match({
       author: 'whoami',
-      creation: (it) => it.should.be.approximately(microtime.now(), 10000),
+      creation: (it) => it.should.be.approximately(microtime.now(), 1000000),
       content: 'Hello ECE'
     })
     // Check it was correctly inserted
