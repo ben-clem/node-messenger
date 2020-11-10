@@ -12,12 +12,13 @@ If we have time, we'll also play with GraphQL and Socket<span>.io.
 
 ## Organization
 - [back-end](../blob/master/back-end)
-    - [lab-1](../blob/master/back-end/lab-1): Node.js
-    - [lab-2](../blob/master/back-end/lab-2): Express.js routing
-    - [lab-3](../blob/master/back-end/lab-3): Storage with LevelDB
 - [front-end](../blob/master/front-end)
-    - [lab-4](../blob/master/front-end/lab-4): React and functional components
-    - [lab-5](../blob/master/front-end/lab-4): Transpilation
+- [old](../blob/master/old)
+    - [lab-1](../blob/master/old/lab-1): Node.js
+    - [lab-2](../blob/master/old/lab-2): Express.js routing
+    - [lab-3](../blob/master/old/lab-3): Storage with LevelDB
+    - [lab-4](../blob/master/old/lab-4): React and functional components
+    - [lab-5](../blob/master/old/lab-5): Transpilation
 
 
 ## Authors
