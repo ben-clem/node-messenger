@@ -1,8 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
+
+const converted = {
+  body: {
+    margin: "0",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif",
+    WebkitFontSmoothing: "antialiased",
+    MozOsxFontSmoothing: "grayscale"
+  },
+  code: {
+    fontFamily:
+      "source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace"
+  }
+};
+
+document.body.style.margin = "0";
 
 ReactDOM.render(
   <React.StrictMode>
