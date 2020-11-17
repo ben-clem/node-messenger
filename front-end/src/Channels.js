@@ -18,7 +18,9 @@ const styles = {
 export default ({
   onChannel
 }) => {
+
   const [channels, setChannels] = useState([])
+
   useEffect( () => {
     const fetch = async () => {
       const {data: channels} = await axios.get('http://localhost:3001/channels')
@@ -26,6 +28,7 @@ export default ({
     }
     fetch()
   }, [])
+
   return (
     <ul style={styles.root}>
       { channels.map( (channel, i) => (
