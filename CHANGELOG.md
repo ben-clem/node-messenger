@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/benzinho75/node-messenger/compare/v0.0.4...HEAD)
 
+# Changed
+
+- Rebased project on lab 5 starting structure
+
 
 ## [0.0.4](https://github.com/benzinho75/node-messenger/compare/v0.0.3...v0.0.4) - ?
 

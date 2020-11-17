@@ -1,36 +1,25 @@
-import { useState } from "react";
+import './App.css';
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from '@emotion/core'
 
 const styles = {
   header: {
-    height: "60px",
-    backgroundColor: "rgba(50,50,52)",
+    height: '60px',
+    backgroundColor: 'rgba(255,255,255,.3)',
     flexShrink: 0,
-    fontFamily: "'Roboto', sans-serif",
-    fontWeight: 800,
-  },
-  title: {
-    position: "absolute",
-    top: "7%",
-    left: "50%",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
   },
   headerLogIn: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
   },
   headerLogOut: {
-    backgroundColor: "blue",
+    backgroundColor: 'blue',
   },
-};
+}
 
-function Header() {
+export default () => {
   return (
-    <header className="App-header" css={styles.header}>
-      <h1 css={styles.title}>FireChat 🔥</h1>
+    <header css={styles.header}>
+      Header
     </header>
   );
 }
-
-export default Header;

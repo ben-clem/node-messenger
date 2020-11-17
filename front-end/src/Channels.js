@@ -1,45 +1,46 @@
-import { useState } from "react";
-import Axios from "axios";
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 /** @jsx jsx */
-import { jsx, withEmotionCache } from "@emotion/core";
+import { jsx } from '@emotion/core'
+// Layout
+import Link from '@material-ui/core/Link'
 
 const styles = {
-  channels: {
-    minWidth: "200px",
-    //borderRightStyle: "solid",
-    fontFamily: "'Roboto', sans-serif",
-    fontWeight: 400,
+  root: {
+    minWidth: '200px',
   },
-  title: {
-    position: "relative",
-    left: "125px",
-    top: "10px",
-    transform: "translate(-50%, -50%)",
-    fontSize: 16
-  },
-};
-
-function Channels() {
-  const [channels, setChannels] = useState([
-    { id: 1, name: "Channel 1" },
-    { id: 2, name: "Channel 2" },
-    { id: 3, name: "Channel 3" },
-  ]);
-  //const { data } = Axios.get("http://localhost:3001/channels/");
-  //setChannels([...channels, data]);
-
-  return (
-    <div css={styles.channels}>
-      <p style={styles.title}>Available channels:</p>
-      <ul>
-        {channels.map((channel) => (
-          <li key={channel.id} css={styles.channel}>
-            {channel.name}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  channel: {
+    padding: '.2rem .5rem',
+    whiteSpace: 'nowrap', 
+  }
 }
 
-export default Channels;
+export default ({
+  onChannel
+}) => {
+  const [channels, setChannels] = useState([])
+  useEffect( () => {
+    const fetch = async () => {
+      const {data: channels} = await axios.get('http://localhost:3001/channels')
+      setChannels(channels)
+    }
+    fetch()
+  }, [])
+  return (
+    <ul style={styles.root}>
+      { channels.map( (channel, i) => (
+        <li key={i} css={styles.channel}>
+          <Link
+            href="#"
+            onClick={ (e) => {
+              e.preventDefault()
+              onChannel(channel)
+            }}
+            >
+            {channel.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
