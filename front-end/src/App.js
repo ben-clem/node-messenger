@@ -1,32 +1,34 @@
-import { useState } from "react";
+import {useState} from 'react'
+import './App.css';
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-import Header from "./Header.js";
-import Main from "./Main.js";
-import Footer from "./Footer.js";
+import { jsx } from '@emotion/core'
+// Local
+import Footer from './Footer'
+import Header from './Header'
+import Main from './Main'
+import Login from './Login'
 
 const styles = {
   root: {
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "rgb(28, 28, 28)",
-    padding: "50px",
-    color: "#fff",
-    position: "absolute",
-    height: "100%",
-    width: "100%",
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    //backgroundColor: '#565E71',
+    padding: '30px',
+    
   },
-};
+}
 
-function App() {
+export default () => {
+  const [user, setUser] = useState(null)
+
   return (
     <div className="App" css={styles.root}>
       <Header />
-      <Main />
+      {
+        user ? <Main /> : <Login onUser={setUser} />
+      }
       <Footer />
     </div>
   );
 }
-
-export default App;

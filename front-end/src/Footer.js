@@ -1,29 +1,40 @@
-import { useState } from "react";
+import './App.css';
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from '@emotion/core'
+import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
 
 const styles = {
-    footer: {
-      height: "30px",
-      backgroundColor: "rgba(50,50,52)",
-      flexShrink: 0,
-      fontFamily: "'Roboto', sans-serif",
-      fontWeight: 300,
-    },
-    title: {
-        position: "absolute",
-        bottom: "3%",
-        left: "150px",
-        transform: "translate(-50%, -50%)",
-      },
-};
+  footer: {
+    position: "fixed",
+    bottom: "0",
+    left: "0",
+    width: "100%",
+    height: '30px',
+    textAlign: "center",
+  },
+}
 
-function Footer() {
+function Copyright() {
   return (
-    <footer className="App-footer" style={styles.footer}>
-      <h6 style={styles.title}>Benoît Clemenceau & Marin Neyret</h6>
-    </footer>
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://github.com/benzinho75/node-messenger">
+        benzinho & mnyrt
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 }
 
-export default Footer;
+export default () => {
+  return (
+    <footer style={styles.footer}>
+      <Box>
+        <Copyright />
+      </Box>
+    </footer>
+  );
+}

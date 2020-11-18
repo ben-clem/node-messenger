@@ -1,36 +1,29 @@
-import { useState } from "react";
+import "./App.css";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
+import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 
-const styles = {
+const styles = makeStyles({
   header: {
-    height: "60px",
-    backgroundColor: "rgba(50,50,52)",
-    flexShrink: 0,
-    fontFamily: "'Roboto', sans-serif",
-    fontWeight: 800,
+    height: "75px",
   },
   title: {
-    position: "absolute",
-    top: "7%",
-    left: "50%",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+    textAlign: "center",
+    transform: "translate(0px, -7%)",
   },
-  headerLogIn: {
-    backgroundColor: "red",
-  },
-  headerLogOut: {
-    backgroundColor: "blue",
-  },
-};
+});
 
-function Header() {
+export default () => {
+
+  const classes = styles();
+  
   return (
-    <header className="App-header" css={styles.header}>
-      <h1 css={styles.title}>FireChat 🔥</h1>
-    </header>
+    <Card className={classes.header}>
+      <CardContent>
+        <Typography variant="h3" component="h3" className={classes.title}>
+          FireChat 🔥
+        </Typography>
+      </CardContent>
+    </Card>
   );
-}
-
-export default Header;
+};
