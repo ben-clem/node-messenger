@@ -16,17 +16,12 @@ const useStyles = (theme) => ({
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    background: 'rgba(0,0,0,.2)',
     position: 'relative',
+    overflowX: 'auto',
   },
   fab: {
     position: 'absolute !important',
-    // position: 'fixed !important',
     top: theme.spacing(2),
-    // width: '50px',
-    // bottom: '0',
-    // marginLeft: '100%',
-    // bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
   fabDisabled: {

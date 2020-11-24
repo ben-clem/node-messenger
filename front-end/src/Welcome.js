@@ -14,7 +14,7 @@ const useStyles = (theme) => ({
     height: '100%',
     flex: '1 1 auto',
     display: 'flex',
-    background: 'rgba(0,0,0,.2)',
+    // background: 'rgba(0,0,0,.2)',
   },
   card: {
     textAlign: 'center',
@@ -27,9 +27,6 @@ const useStyles = (theme) => ({
 
 export default () => {
   const styles = useStyles(useTheme())
-
-  
-
   return (
     <div css={styles.root}>
       <Grid

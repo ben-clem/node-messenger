@@ -13,20 +13,22 @@ const styles = {
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    //backgroundColor: '#565E71',
-    padding: '30px',
-    
+    backgroundColor: '#565E71',
+    padding: '50px',
   },
 }
 
 export default () => {
   const [user, setUser] = useState(null)
-
+  const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
+  const drawerToggleListener = () => {
+    setDrawerMobileVisible(!drawerMobileVisible)
+  }
   return (
     <div className="App" css={styles.root}>
-      <Header />
+      <Header drawerToggleListener={drawerToggleListener}/>
       {
-        user ? <Main /> : <Login onUser={setUser} />
+        user ? <Main drawerMobileVisible={drawerMobileVisible} /> : <Login onUser={setUser} />
       }
       <Footer />
     </div>

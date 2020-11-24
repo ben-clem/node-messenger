@@ -1,29 +1,48 @@
-import "./App.css";
+import './App.css';
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
-import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
+import { jsx } from '@emotion/core'
+// Layout
+import { useTheme } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
-const styles = makeStyles({
+const useStyles = (theme) => ({
   header: {
-    height: "75px",
+    padding: theme.spacing(1),
+    backgroundColor: 'rgba(255,255,255,.3)',
+    flexShrink: 0,
   },
-  title: {
-    textAlign: "center",
-    transform: "translate(0px, -7%)",
+  headerLogIn: {
+    backgroundColor: 'red',
   },
-});
+  headerLogOut: {
+    backgroundColor: 'blue',
+  },
+  menu: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'none !important',
+    },
+  }
+})
 
-export default () => {
-
-  const classes = styles();
-  
+export default ({
+  drawerToggleListener
+}) => {
+  const styles = useStyles(useTheme())
+  const handleDrawerToggle = (e) => {
+    drawerToggleListener()
+  }
   return (
-    <Card className={classes.header}>
-      <CardContent>
-        <Typography variant="h3" component="h3" className={classes.title}>
-          FireChat 🔥
-        </Typography>
-      </CardContent>
-    </Card>
+    <header css={styles.header}>
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerToggle}
+        css={styles.menu}
+      >
+        <MenuIcon />
+      </IconButton>
+      Header
+    </header>
   );
-};
+}
