@@ -1,46 +1,49 @@
-import {useState, useEffect} from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 /** @jsx jsx */
-import { jsx } from '@emotion/core'
+import { jsx } from "@emotion/core";
 // Layout
-import Link from '@material-ui/core/Link'
+import Link from "@material-ui/core/Link";
 
 const styles = {
   // root: {
   //   minWidth: '200px',
   // },
   channel: {
-    padding: '.2rem .5rem',
-    whiteSpace: 'nowrap', 
-  }
-}
+    padding: ".2rem .5rem",
+    whiteSpace: "nowrap",
+  },
+};
 
-export default ({
-  onChannel
-}) => {
-  const [channels, setChannels] = useState([])
-  useEffect( () => {
+export default ({ onChannel }) => {
+  const [channels, setChannels] = useState([]);
+  useEffect(() => {
     const fetch = async () => {
-      const {data: channels} = await axios.get('http://localhost:3001/channels')
-      setChannels(channels)
-    }
-    fetch()
-  }, [])
+      const { data: channels } = await axios
+        .get("http://localhost:3001/channels")
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        });
+      setChannels(channels);
+    };
+    fetch();
+  }, [channels]);
   return (
     <ul style={styles.root}>
-      { channels.map( (channel, i) => (
+      {channels.map((channel, i) => (
         <li key={i} css={styles.channel}>
           <Link
             href="#"
-            onClick={ (e) => {
-              e.preventDefault()
-              onChannel(channel)
+            onClick={(e) => {
+              e.preventDefault();
+              onChannel(channel);
             }}
-            >
+          >
             {channel.name}
           </Link>
         </li>
       ))}
     </ul>
   );
-}
+};
