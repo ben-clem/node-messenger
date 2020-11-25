@@ -13,6 +13,7 @@
     "axios": "^0.21.0",
     "dayjs": "^1.9.4",
     "react": "^16.13.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "rehype-stringify": "^8.0.0",
