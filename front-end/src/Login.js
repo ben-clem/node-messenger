@@ -1,139 +1,145 @@
-import {} from "react";
+import { useState } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 // Layout
 import { useTheme } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
+//import { set } from "../../back-end/lib/app";
+const axios = require("axios");
+const qs = require("qs");
 
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+const useStyles = (theme) => ({
+  root: {
+    flex: "1 1 auto",
+    background: theme.palette.background.default,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    "& > div": {
+      margin: `${theme.spacing(1)}`,
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+    "& fieldset": {
+      border: "none",
+      "& label": {
+        marginBottom: theme.spacing(0.5),
+        display: "block",
+      },
+    },
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+});
 
+const crypto = require("crypto");
 
+const base64URLEncode = (str) =>
+  str
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
 
-export default ({ onUser }) => {
-  const classes = useStyles(useTheme());
+const sha256 = (buffer) => crypto.createHash("sha256").update(buffer).digest();
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            value="login"
-            onClick={(e) => {
-              e.stopPropagation();
-              onUser({ username: "david" });
-            }}
-          >
-            Sign In
-          </Button>
-          {/* <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid> */}
-        </form>
-      </div>
-      
-    </Container>
-    
-  );
+const redirect_url = function (
+  authorization_endpoint,
+  client_id,
+  redirect_uri,
+  scope
+) {
+  const code_verifier = base64URLEncode(crypto.randomBytes(32));
+  const code_challenge = base64URLEncode(sha256(code_verifier));
+  const url = [
+    `${authorization_endpoint}?`,
+    `client_id=${client_id}&`,
+    `scope=${scope}&`,
+    "response_type=code&",
+    `redirect_uri=${redirect_uri}&`,
+    `code_challenge=${code_challenge}&`,
+    "code_challenge_method=S256",
+  ].join("");
+  const data = {
+    code_verifier,
+    url,
+  };
+  console.log(JSON.stringify(data, null, 2));
+
+  return data.code_verifier;
 };
 
-{
-  /* <div css={styles.root}>
+const code_grant = async function (code_verifier) {
+  // If this is a callback, POST code_grant
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const code = urlParams.get("code");
+
+  if (code !== null && code !== "") {
+    try {
+      const requestBody = qs.stringify({
+        grant_type: "authorization_code",
+        client_id: "node-messenger",
+        redirect_uri: 'http://127.0.0.1:3000/callback',
+        client_secret: "ZXhhbXBsZS1hcHAtc2VjcmV0",
+        code_verifier: code_verifier,
+        code: code,
+      }, { encode: false });
+      console.log(requestBody);
+
+      const { data: message } = await axios.post(
+        "http://127.0.0.1:5556/dex/token",
+        requestBody
+      );
+      console.log(JSON.stringify(message, null, 2));
+    } catch (err) {
+      console.log(JSON.stringify(err, null, 2));
+    }
+  }
+};
+
+export default ({ onUser }) => {
+  const styles = useStyles(useTheme());
+  const [codeVerifier, setCodeVerifier] = useState("");
+
+  code_grant(codeVerifier);
+
+  return (
+    <div css={styles.root}>
       <div>
-        <fieldset>
+        {/* <fieldset>
           <label htmlFor="username">username: </label>
           <input id="username" name="username" />
         </fieldset>
         <fieldset>
           <label htmlFor="password">password:</label>
           <input id="password" name="password" type="password" />
-        </fieldset>
+        </fieldset> */}
         <fieldset>
           <input
             type="submit"
             value="login"
             onClick={(e) => {
               e.stopPropagation();
-              onUser({ username: "david" });
+
+              setCodeVerifier(
+                redirect_url(
+                  "http://127.0.0.1:5556/dex/auth",
+                  "node-messenger",
+                  "http://127.0.0.1:3000/callback",
+                  "openid%20email%20offline_access"
+                )
+              );
+
+              //onUser({username: 'david'})
             }}
           />
         </fieldset>
+        {/* <fieldset>
+          <input type="submit" value="login" onClick={ (e) => {
+            e.stopPropagation()
+            onUser({username: 'david'})
+          }} />
+        </fieldset> */}
       </div>
-    </div> */
-}
+    </div>
+  );
+};
