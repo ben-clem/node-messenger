@@ -62,6 +62,7 @@ const redirect_url = function (
     url,
   };
   console.log(JSON.stringify(data, null, 2));
+  window.location.href = url;
 
   return data.code_verifier;
 };
@@ -75,14 +76,17 @@ const code_grant = async function (code_verifier) {
 
   if (code !== null && code !== "") {
     try {
-      const requestBody = qs.stringify({
-        grant_type: "authorization_code",
-        client_id: "node-messenger",
-        redirect_uri: 'http://127.0.0.1:3000/callback',
-        client_secret: "ZXhhbXBsZS1hcHAtc2VjcmV0",
-        code_verifier: code_verifier,
-        code: code,
-      }, { encode: false });
+      const requestBody = qs.stringify(
+        {
+          grant_type: "authorization_code",
+          client_id: "node-messenger",
+          redirect_uri: "http://127.0.0.1:3000/callback",
+          client_secret: "ZXhhbXBsZS1hcHAtc2VjcmV0",
+          code_verifier: code_verifier,
+          code: code,
+        },
+        { encode: false }
+      );
       console.log(requestBody);
 
       const { data: message } = await axios.post(
