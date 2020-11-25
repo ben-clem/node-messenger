@@ -4,6 +4,8 @@ import { jsx } from "@emotion/core";
 // Layout
 import { useTheme } from "@material-ui/core/styles";
 //import { set } from "../../back-end/lib/app";
+import { useCookies } from "react-cookie";
+
 const axios = require("axios");
 const qs = require("qs");
 
@@ -62,87 +64,124 @@ const redirect_url = function (
     url,
   };
   console.log(JSON.stringify(data, null, 2));
-  window.location.href = url;
 
-  return data.code_verifier;
-};
+  //window.location.href = url;
 
-const code_grant = async function (code_verifier) {
-  // If this is a callback, POST code_grant
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-
-  const code = urlParams.get("code");
-
-  if (code !== null && code !== "") {
-    try {
-      const requestBody = qs.stringify(
-        {
-          grant_type: "authorization_code",
-          client_id: "node-messenger",
-          redirect_uri: "http://127.0.0.1:3000/callback",
-          client_secret: "ZXhhbXBsZS1hcHAtc2VjcmV0",
-          code_verifier: code_verifier,
-          code: code,
-        },
-        { encode: false }
-      );
-      console.log(requestBody);
-
-      const { data: message } = await axios.post(
-        "http://127.0.0.1:5556/dex/token",
-        requestBody
-      );
-      console.log(JSON.stringify(message, null, 2));
-    } catch (err) {
-      console.log(JSON.stringify(err, null, 2));
-    }
-  }
+  return data;
 };
 
 export default ({ onUser }) => {
   const styles = useStyles(useTheme());
-  const [codeVerifier, setCodeVerifier] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies([]);
 
-  code_grant(codeVerifier);
+  const code_grant = async function (codeVerifier) {
+    // If this is a callback, POST code_grant
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const code = urlParams.get("code");
+
+    if (code !== null && code !== "") {
+      try {
+        console.log("codeVerifier: ", codeVerifier);
+
+        const requestBody = qs.stringify(
+          {
+            grant_type: "authorization_code",
+            client_id: "node-messenger",
+            code_verifier: `${codeVerifier}`,
+            redirect_uri: "http://127.0.0.1:3000/callback",
+            code: code,
+          },
+          null,
+          2
+        );
+        console.log(requestBody);
+
+        const { data: oauth } = await axios.post(
+          "http://127.0.0.1:5556/dex/token",
+          requestBody
+        );
+        console.log(JSON.stringify(oauth, null, 2));
+        setCookie("oauth", oauth);
+        window.location = "/";
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  console.log("222 codeVerifier: ", cookies.code_verifier);
+  code_grant(cookies.code_verifier);
+
+  var printEmail;
+  if (cookies.oauth) {
+    const { id_token } = cookies.oauth;
+    const id_payload = id_token.split(".")[1];
+    const { email } = JSON.parse(atob(id_payload));
+
+    printEmail = (
+      <p>
+        Bienvenue {email}
+        {/* access_token: {cookies.oauth.access_token}
+        <br></br>
+        token_type: {cookies.oauth.token_type}
+        <br></br>
+        expires_in: {cookies.oauth.expires_in}
+        <br></br>
+        refresh_token: {cookies.oauth.refresh_token}
+        <br></br>
+        id_token: {cookies.oauth.id_token}
+        <br></br> */}
+      </p>
+    );
+  } else {
+    printEmail = <p>Déconnecté</p>;
+  }
 
   return (
     <div css={styles.root}>
       <div>
-        {/* <fieldset>
-          <label htmlFor="username">username: </label>
-          <input id="username" name="username" />
-        </fieldset>
+        {printEmail}
         <fieldset>
-          <label htmlFor="password">password:</label>
-          <input id="password" name="password" type="password" />
-        </fieldset> */}
-        <fieldset>
-          <input
-            type="submit"
-            value="login"
-            onClick={(e) => {
-              e.stopPropagation();
+          {!cookies.oauth ? (
+            <input
+              type="submit"
+              value="login"
+              onClick={(e) => {
+                e.stopPropagation();
 
-              setCodeVerifier(
-                redirect_url(
+                const data = redirect_url(
                   "http://127.0.0.1:5556/dex/auth",
                   "node-messenger",
                   "http://127.0.0.1:3000/callback",
                   "openid%20email%20offline_access"
-                )
-              );
+                );
+                console.log("111 codeVerifier: ", data.code_verifier);
 
-              //onUser({username: 'david'})
-            }}
-          />
+                setCookie("code_verifier", data.code_verifier);
+
+                window.location.href = data.url;
+
+                //onUser({username: 'david'})
+              }}
+            />
+          ) : (
+            <input
+              type="submit"
+              value="logout"
+              onClick={(e) => {
+                e.stopPropagation();
+
+                removeCookie("oauth");
+
+                window.location.href = "/";
+
+                //onUser({username: 'david'})
+              }}
+            />
+          )}
         </fieldset>
-        {/* <fieldset>
-          <input type="submit" value="login" onClick={ (e) => {
-            e.stopPropagation()
-            onUser({username: 'david'})
-          }} />
-        </fieldset> */}
       </div>
     </div>
   );
