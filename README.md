@@ -10,7 +10,10 @@ If we have time, we'll also play with GraphQL and Socket<span>.io.
 [CHANGELOG.md](../master/CHANGELOG.md)
 
 
+## Instructions
+[INSTRUCTIONS.md](../master/INSTRUCTIONS.md)
+
+
 ## Authors
 Benoît Clemenceau <b.clemenceau.pro@gmail.com> (https://github.com/benzinho75)<br>
 Marin Neyret <marin.nyrt@gmail.com> (https://github.com/MARINeyret)
-
