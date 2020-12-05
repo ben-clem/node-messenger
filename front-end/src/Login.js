@@ -1,188 +1,156 @@
-import { useState } from "react";
+import { useContext, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import crypto from 'crypto'
+import qs from 'qs'
+import axios from 'axios'
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx } from '@emotion/core'
 // Layout
-import { useTheme } from "@material-ui/core/styles";
-//import { set } from "../../back-end/lib/app";
-import { useCookies } from "react-cookie";
+import { useTheme } from '@material-ui/core/styles';
+import Link from '@material-ui/core/Link'
+// Local
+import Context from './Context'
+import {
+  useHistory
+} from "react-router-dom";
 
-const axios = require("axios");
-const qs = require("qs");
+const base64URLEncode = (str) => {
+  return str.toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
+const sha256 = (buffer) => {
+  return crypto
+    .createHash('sha256')
+    .update(buffer)
+    .digest()
+}
 
 const useStyles = (theme) => ({
   root: {
-    flex: "1 1 auto",
+    flex: '1 1 auto',
     background: theme.palette.background.default,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    "& > div": {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& > div': {
       margin: `${theme.spacing(1)}`,
-      marginLeft: "auto",
-      marginRight: "auto",
+      marginLeft: 'auto',
+      marginRight: 'auto',
     },
-    "& fieldset": {
-      border: "none",
-      "& label": {
-        marginBottom: theme.spacing(0.5),
-        display: "block",
+    '& fieldset': {
+      border: 'none',
+      '& label': {
+        marginBottom: theme.spacing(.5),
+        display: 'block',
       },
     },
   },
-});
+})
 
-const crypto = require("crypto");
-
-const base64URLEncode = (str) =>
-  str
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-
-const sha256 = (buffer) => crypto.createHash("sha256").update(buffer).digest();
-
-const redirect_url = function (
-  authorization_endpoint,
-  client_id,
-  redirect_uri,
-  scope
-) {
-  const code_verifier = base64URLEncode(crypto.randomBytes(32));
-  const code_challenge = base64URLEncode(sha256(code_verifier));
-  const url = [
-    `${authorization_endpoint}?`,
-    `client_id=${client_id}&`,
-    `scope=${scope}&`,
-    "response_type=code&",
-    `redirect_uri=${redirect_uri}&`,
-    `code_challenge=${code_challenge}&`,
-    "code_challenge_method=S256",
-  ].join("");
-  const data = {
-    code_verifier,
-    url,
-  };
-  console.log(JSON.stringify(data, null, 2));
-
-  //window.location.href = url;
-
-  return data;
-};
-
-export default ({ onUser }) => {
-  const styles = useStyles(useTheme());
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-
-  const code_grant = async function (codeVerifier) {
-    // If this is a callback, POST code_grant
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
-    const code = urlParams.get("code");
-
-    if (code !== null && code !== "") {
-      try {
-        console.log("codeVerifier: ", codeVerifier);
-
-        const requestBody = qs.stringify(
-          {
-            grant_type: "authorization_code",
-            client_id: "node-messenger",
-            code_verifier: `${codeVerifier}`,
-            redirect_uri: "http://127.0.0.1:3000/callback",
-            code: code,
-          },
-          null,
-          2
-        );
-        console.log(requestBody);
-
-        const { data: oauth } = await axios.post(
-          "http://127.0.0.1:5556/dex/token",
-          requestBody
-        );
-        console.log(JSON.stringify(oauth, null, 2));
-        setCookie("oauth", oauth);
-        window.location = "/";
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
-  console.log("222 codeVerifier: ", cookies.code_verifier);
-  code_grant(cookies.code_verifier);
-
-  var printEmail;
-  if (cookies.oauth) {
-    const { id_token } = cookies.oauth;
-    const id_payload = id_token.split(".")[1];
-    const { email } = JSON.parse(atob(id_payload));
-
-    printEmail = (
-      <p>
-        Bienvenue {email}
-        {/* access_token: {cookies.oauth.access_token}
-        <br></br>
-        token_type: {cookies.oauth.token_type}
-        <br></br>
-        expires_in: {cookies.oauth.expires_in}
-        <br></br>
-        refresh_token: {cookies.oauth.refresh_token}
-        <br></br>
-        id_token: {cookies.oauth.id_token}
-        <br></br> */}
-      </p>
-    );
-  } else {
-    printEmail = <p>Déconnecté</p>;
+const Redirect = ({
+  config,
+  codeVerifier,
+}) => {
+  const styles = useStyles(useTheme())
+  const redirect = (e) => {
+    e.stopPropagation()
+    const code_challenge = base64URLEncode(sha256(codeVerifier))
+    const url = [
+      `${config.authorization_endpoint}?`,
+      `client_id=${config.client_id}&`,
+      `scope=${config.scope}&`,
+      `response_type=code&`,
+      `redirect_uri=${config.redirect_uri}&`,
+      `code_challenge=${code_challenge}&`,
+      `code_challenge_method=S256`,
+    ].join('')
+    window.location = url
   }
-
   return (
     <div css={styles.root}>
-      <div>
-        {printEmail}
-        <fieldset>
-          {!cookies.oauth ? (
-            <input
-              type="submit"
-              value="login"
-              onClick={(e) => {
-                e.stopPropagation();
-
-                const data = redirect_url(
-                  "http://127.0.0.1:5556/dex/auth",
-                  "node-messenger",
-                  "http://127.0.0.1:3000/callback",
-                  "openid%20email%20offline_access"
-                );
-                console.log("111 codeVerifier: ", data.code_verifier);
-
-                setCookie("code_verifier", data.code_verifier);
-
-                window.location.href = data.url;
-
-                //onUser({username: 'david'})
-              }}
-            />
-          ) : (
-            <input
-              type="submit"
-              value="logout"
-              onClick={(e) => {
-                e.stopPropagation();
-
-                removeCookie("oauth");
-
-                window.location.href = "/";
-
-                //onUser({username: 'david'})
-              }}
-            />
-          )}
-        </fieldset>
-      </div>
+      <Link onClick={redirect} color="secondary">Login with OpenID Connect and OAuth2</Link>
     </div>
-  );
-};
+  )
+}
+
+const Tokens = ({
+  oauth
+}) => {
+  const {setOauth} = useContext(Context)
+  const styles = useStyles(useTheme())
+  const {id_token} = oauth
+  const id_payload = id_token.split('.')[1]
+  const {email} = JSON.parse(atob(id_payload))
+  const logout = (e) => {
+    e.stopPropagation()
+    setOauth(null)
+  }
+  return (
+    <div css={styles.root}>
+      Welcome {email} <Link onClick={logout} color="secondary">logout</Link>
+    </div>
+  )
+}
+
+export default ({
+  onUser
+}) => {
+  const styles = useStyles(useTheme())
+  const history = useHistory();
+  // const location = useLocation();
+  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const {oauth, setOauth} = useContext(Context)
+  const config = {
+    authorization_endpoint: 'http://127.0.0.1:5556/dex/auth',
+    token_endpoint: 'http://127.0.0.1:5556/dex/token',
+    client_id: 'webtech-frontend',
+    redirect_uri: 'http://127.0.0.1:3000',
+    scope: 'openid%20email%20offline_access',
+  }
+  const params = new URLSearchParams(window.location.search)
+  const code = params.get('code')
+  // is there a code query parameters in the url 
+  if(!code){ // no: we are not being redirected from an oauth server
+    if(!oauth){
+      const codeVerifier = base64URLEncode(crypto.randomBytes(32))
+      setCookie('code_verifier', codeVerifier)
+      return (
+        <Redirect codeVerifier={codeVerifier} config={config} css={styles.root} />
+      )
+    }else{ // yes: user is already logged in, great, is is working
+      return (
+        <Tokens oauth={oauth} css={styles.root} />
+      )
+    }
+  }else{ // yes: we are coming from an oauth server
+    const codeVerifier = cookies.code_verifier
+    useEffect( () => {
+      const fetch = async () => {
+        try {
+          const {data} = await axios.post(
+            config.token_endpoint
+          , qs.stringify ({
+            grant_type: 'authorization_code',
+            client_id: `${config.client_id}`,
+            code_verifier: `${codeVerifier}`,
+            redirect_uri: `${config.redirect_uri}`,
+            code: `${code}`,
+          }))
+          removeCookie('code_verifier')
+          setOauth(data)
+          // window.location = '/'
+          history.push('/')
+        }catch (err) {
+          console.error(err)
+        }
+      }
+      fetch()
+    })
+    return (
+      <div css={styles.root}>Loading tokens</div>
+    )
+  }
+}
