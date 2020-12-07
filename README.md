@@ -31,14 +31,13 @@ _How to start and use the application, run the tests, ..._
    # Install Go
    apt install golang-go
    # Download Dex
-   git clone https://github.com/dexidp/dex.git
+   git clone https://github.com/dexidp/dex
    # Build Dex
    cd dex
    make
    make examples
    ```
 
-   Note, the provided `.gitignore` file ignore the `dex` folder.
 
 3. **Register your GitHub application, get the clientID and clientSecret from GitHub and report them to your Dex configuration:**<br>
 
@@ -55,7 +54,7 @@ _How to start and use the application, run the tests, ..._
    ```
 
    **And place it inside your dex folder.**<br>
-   You should have a structure like: `dex/dex-config/config.yml`.<br>
+   You should have a structure like this: `dex/dex-config/config.yml`.<br>
    The frond-end application is already registered and CORS is activated.
 
 4. **Now that Dex is built and configured, your can start the Dex server:**<br>
@@ -68,6 +67,7 @@ _How to start and use the application, run the tests, ..._
 5. **Start the back-end:**<br>
 
    ```bash
+   # In another terminal tab:
    cd back-end
    # Install dependencies (use yarn or npm)
    yarn install
@@ -79,6 +79,7 @@ _How to start and use the application, run the tests, ..._
 
 6. **Start the front-end:**<br>
    ```bash
+   # In a third terminal tab:
    cd front-end
    # Install dependencies (use yarn or npm)
    yarn install
