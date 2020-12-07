@@ -9,14 +9,7 @@ Start the web application:
 
 ```bash
 ./bin/start 
-Chat is waiting for you at http://localhost:3001
-```
-
-Start the Dex server:
-
-```bash
-cd $GOPATH/src/github.com/dexidp/dex
-./bin/dex serve examples/config-dev.yaml
+Chat is waiting for you at http://localhost:3000
 ```
 
 Run the tests with mocha:

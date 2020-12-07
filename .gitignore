@@ -1,3 +1,6 @@
 **/node_modules
 **/.DS_Store
-back-end/db
+/back-end/db
+**/package-lock.json
+**/yarn.lock
+**/dex

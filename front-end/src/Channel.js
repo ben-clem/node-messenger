@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react';
+import {useContext, useRef, useState} from 'react';
 import axios from 'axios';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
@@ -9,6 +9,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 // Local
 import Form from './channel/Form'
 import List from './channel/List'
+import Context from './Context'
+import { useHistory, useParams } from 'react-router-dom'
 
 const useStyles = (theme) => ({
   root: {
@@ -29,11 +31,17 @@ const useStyles = (theme) => ({
   }
 })
 
-export default ({
-  channel
-}) => {
+export default () => {
+  const history = useHistory()
+  const { id } = useParams()
+  const {channels} = useContext(Context)
+  const channel = channels.find( channel => channel.id === id)
+  if(!channel) {
+    history.push('/oups')
+    return <div/>
+  }
   const styles = useStyles(useTheme())
-  const listRef = useRef();
+  const listRef = useRef()
   const channelId = useRef()
   const [messages, setMessages] = useState([])
   const [scrollDown, setScrollDown] = useState(false)
@@ -48,7 +56,6 @@ export default ({
       listRef.current.scroll()
     }
   }
-  
   if(channelId.current !== channel.id){
     fetchMessages()
     channelId.current = channel.id
