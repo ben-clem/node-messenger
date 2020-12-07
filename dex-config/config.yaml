@@ -10,7 +10,7 @@ issuer: http://127.0.0.1:5556/dex
 storage:
   type: sqlite3
   config:
-    file: app/dex.db
+    file: examples/dex.db
 
 # Configuration for the HTTP endpoints.
 web:
@@ -25,7 +25,7 @@ staticClients:
 - id: webtech-frontend
   redirectURIs:
   - 'http://127.0.0.1:3000'
-  name: 'WetTech Front End Chat Server'
+  name: 'WebTech Front End Chat Server'
   public: true
 
 connectors:
@@ -33,8 +33,8 @@ connectors:
   id: github
   name: GitHub
   config:
-    clientID: dbaa49ba4a60979b997f
-    clientSecret: 04eba4f0685f98563f48ffa41231c819952f5568
+    clientID: ###your_client_ID###
+    clientSecret: ###your_client_secret###
     redirectURI: http://127.0.0.1:5556/dex/callback
 
 # Let dex keep a list of passwords which can be used to login to dex.
