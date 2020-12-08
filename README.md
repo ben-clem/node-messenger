@@ -105,7 +105,7 @@ Project management
 Application development
 
 - Welcome screens  
-  _place your comments_
+  Customized login screen
 - New channel creation  
   _place your comments_
 - Channel membership and access  

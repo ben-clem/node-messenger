@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/benzinho75/node-messenger/compare/v1.0.0...HEAD)
 
+### To fix
+
+- Unable to reload page when on a channel
+- Messages always posted as david no matter who is logged in
+- Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
+- Missing "leave channel" button (go back to menu)
+
+
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 
 ### Changed
