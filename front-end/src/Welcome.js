@@ -44,10 +44,10 @@ const useStyles = (theme) => ({
   listItemDone: {
     borderRadius: "1em",
     "&,&:focus": {
-      backgroundColor: "rgb(20, 255, 120, 0.5)",
+      backgroundColor: "rgb(20, 255, 120, 0.5) !important",
     },
-    "&:hover": { 
-      backgroundColor: "rgb(20, 255, 120, 0.25) !important",
+    "&:hover": {
+      backgroundColor: "rgb(20, 255, 120, 0.35) !important",
     },
   },
 });
@@ -120,14 +120,15 @@ export default () => {
   const handleListItemClick = (user) => {
     // Toggle: si l'user est déja séléctionné, le retirer, sinon, l'ajouter
     if (selectedUsers.includes(user.username)) {
-      const index = selectedUsers.indexOf(user.username);
-      if (index > -1) {
-        setSelectedUsers(selectedUsers.splice(index, 1));
-      }
+      setSelectedUsers(
+        selectedUsers.filter(function (value, index, arr) {
+          return value !== user.username;
+        })
+      );
     } else {
       setSelectedUsers([...selectedUsers, user.username]);
     }
-    
+    setUsers(users);
   };
 
   return (
@@ -167,8 +168,9 @@ export default () => {
             </DialogTitle>
 
             <List>
-              {users.map((user) => {
-                if (user.username != oauth.email) {
+              {users.map(
+                (user) => {
+                  /* if (user.username != oauth.email) { */
                   return (
                     <ListItem
                       button
@@ -185,6 +187,7 @@ export default () => {
                         "selectedUsers.includes(user.username): " +
                           selectedUsers.includes(user.username)
                       )}
+                      {console.log("selectedUsers: " + selectedUsers)}
                       <ListItemAvatar>
                         <Avatar className={styles.avatar}>
                           <PersonIcon />
@@ -194,7 +197,8 @@ export default () => {
                     </ListItem>
                   );
                 }
-              })}
+                /* } */
+              )}
             </List>
           </DialogContent>
 
