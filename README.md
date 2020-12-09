@@ -108,6 +108,7 @@ Application development
   - Customized login screen
 - New channel creation  
   - Create channel button + dialog (works with enter key)
+  - Adding known users to a channel when creating it
 - Channel membership and access  
   _place your comments_
 - Ressource access control  

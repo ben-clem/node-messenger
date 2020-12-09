@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Customized login screen and worked and looks
 - Create channel button + dialog (works with enter key)
+- Adding known users to a channel when creating it
 
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 

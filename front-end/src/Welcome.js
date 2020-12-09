@@ -17,6 +17,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { orange } from "@material-ui/core/colors";
 import Context from "./Context";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import PersonIcon from "@material-ui/icons/Person";
+import AddIcon from "@material-ui/icons/Add";
+import { blue } from "@material-ui/core/colors";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = (theme) => ({
   root: {
@@ -32,6 +40,15 @@ const useStyles = (theme) => ({
   icon: {
     width: "30%",
     fill: "#fff",
+  },
+  listItemDone: {
+    borderRadius: "1em",
+    "&,&:focus": {
+      backgroundColor: "rgb(20, 255, 120, 0.5)",
+    },
+    "&:hover": { 
+      backgroundColor: "rgb(20, 255, 120, 0.25) !important",
+    },
   },
 });
 
@@ -71,13 +88,15 @@ export default () => {
   const styles = useStyles(useTheme());
   const [newChannelFormOpen, setNewChannelFormOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
-  const { oauth, setOauth } = useContext(
-    Context
-  );
+  const { oauth, setOauth } = useContext(Context);
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const openForm = () => {
     setNewChannelFormOpen(true);
     //console.log("oauth.email = " + oauth.email);
+
+    getUsers();
   };
 
   const createChannel = async () => {
@@ -86,11 +105,29 @@ export default () => {
     await axios.post(`http://localhost:3001/channels`, {
       name: newChannelName,
       owner: oauth.email,
-      members: [],
+      members: selectedUsers,
     });
 
     //setNewChannelName("");
     window.location.reload(false);
+  };
+
+  const getUsers = async () => {
+    const { data: users } = await axios.get(`http://localhost:3001/users`);
+    setUsers(users);
+  };
+
+  const handleListItemClick = (user) => {
+    // Toggle: si l'user est déja séléctionné, le retirer, sinon, l'ajouter
+    if (selectedUsers.includes(user.username)) {
+      const index = selectedUsers.indexOf(user.username);
+      if (index > -1) {
+        setSelectedUsers(selectedUsers.splice(index, 1));
+      }
+    } else {
+      setSelectedUsers([...selectedUsers, user.username]);
+    }
+    
   };
 
   return (
@@ -103,9 +140,6 @@ export default () => {
         }}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">
-          Please enter the name of the new channel:
-        </DialogTitle>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -113,6 +147,9 @@ export default () => {
           }}
         >
           <DialogContent>
+            <DialogTitle id="form-dialog-title">
+              Please enter the name of the new channel:
+            </DialogTitle>
             <ColorTextField
               autoFocus
               id="name"
@@ -123,11 +160,49 @@ export default () => {
               value={newChannelName}
               onChange={(e) => setNewChannelName(e.target.value)}
             />
+
+            <DialogTitle id="form-dialog-title-2">
+              <br></br>
+              And select its members:
+            </DialogTitle>
+
+            <List>
+              {users.map((user) => {
+                if (user.username != oauth.email) {
+                  return (
+                    <ListItem
+                      button
+                      onClick={() => handleListItemClick(user)}
+                      key={user.id}
+                      css={
+                        selectedUsers.includes(user.username)
+                          ? styles.listItemDone
+                          : styles.listItem
+                      }
+                    >
+                      {" "}
+                      {console.log(
+                        "selectedUsers.includes(user.username): " +
+                          selectedUsers.includes(user.username)
+                      )}
+                      <ListItemAvatar>
+                        <Avatar className={styles.avatar}>
+                          <PersonIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={user.username} />
+                    </ListItem>
+                  );
+                }
+              })}
+            </List>
           </DialogContent>
+
           <DialogActions>
             <Button
               onClick={() => {
                 setNewChannelFormOpen(false);
+                setSelectedUsers([]);
               }}
               color="error"
             >
@@ -139,6 +214,8 @@ export default () => {
           </DialogActions>
         </form>
       </Dialog>
+
+      {/* New Channel Form */}
 
       {/* Buttons */}
       <Grid
@@ -158,12 +235,13 @@ export default () => {
             </Button>
           </div>
         </Grid>
+        {/* To be placed inside channel
         <Grid item xs>
           <div css={styles.card}>
             <FriendsIcon css={styles.icon} />
             <Typography color="textPrimary">Invite friends</Typography>
           </div>
-        </Grid>
+        </Grid> */}
         <Grid item xs>
           <div css={styles.card}>
             <SettingsIcon css={styles.icon} />
