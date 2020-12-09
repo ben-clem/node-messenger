@@ -15,35 +15,44 @@ app.get("/", (req, res) => {
   res.send(["<h1>ECE DevOps Chat</h1>"].join(""));
 });
 
-// Channels
+//////////////
+// Channels //
+//////////////
 
-/* For debugging */
+/* Get channels without authentication for debugging */
 app.get("/channels", async (req, res) => {
   const channels = await db.channels.list();
   res.json(channels);
 });
+/* --- */
 
+/* get channels => db list channels */
 app.get("/channels", authenticate, async (req, res) => {
   const channels = await db.channels.list();
   res.json(channels);
 });
 
+/* post channels => db create channel */
 app.post("/channels", async (req, res) => {
   const channel = await db.channels.create(req.body);
   res.status(201).json(channel);
 });
 
+/* get channels:id => db get channel */
 app.get("/channels/:id", async (req, res) => {
   const channel = await db.channels.get(req.params.id);
   res.json(channel);
 });
 
+/* put channels:id => db update channel */
 app.put("/channels/:id", async (req, res) => {
   const channel = await db.channels.update(req.body);
   res.json(channel);
 });
 
-// Messages
+//////////////
+// Messages //
+//////////////
 
 app.get("/channels/:id/messages", async (req, res) => {
   const messages = await db.messages.list(req.params.id);
@@ -55,13 +64,16 @@ app.post("/channels/:id/messages", async (req, res) => {
   res.status(201).json(message);
 });
 
-// Users
+///////////
+// Users //
+///////////
 
 app.get("/users", async (req, res) => {
   const users = await db.users.list();
   res.json(users);
 });
 
+/* post users => db create user */
 app.post("/users", async (req, res) => {
   const user = await db.users.create(req.body);
   res.status(201).json(user);

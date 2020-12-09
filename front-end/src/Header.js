@@ -47,16 +47,16 @@ export default ({ drawerToggleListener }) => {
   };
   return (
     <Card css={styles.header} square variant="outlined">
-      <Grid container spacing="0">
-        <Grid item xs={12} justify="center">
+      <Grid container spacing={0}>
+        <Grid item xs={12}>
           <Typography variant="h3" component="h3" align="center">
             FireChat 🔥
           </Typography>
         </Grid>
 
         {oauth ? (
-          <Grid container spacing="0">
-            <Grid item xs={2} sm={0}>
+          <Grid container spacing={0}>
+            <Grid item xs={2} sm={false}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -67,7 +67,7 @@ export default ({ drawerToggleListener }) => {
               </IconButton>
             </Grid>
 
-            <Grid item xs={10} sm={12} alignContent="center" justify="center">
+            <Grid item xs={10} sm={12}>
               <p css={styles.email}>
                 {oauth.email} <Link onClick={onClickLogout} color="error">(logout)</Link>
               </p>

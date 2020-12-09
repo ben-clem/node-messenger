@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 // Layout
@@ -16,6 +16,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { orange } from "@material-ui/core/colors";
+import Context from "./Context";
 
 const useStyles = (theme) => ({
   root: {
@@ -70,9 +71,13 @@ export default () => {
   const styles = useStyles(useTheme());
   const [newChannelFormOpen, setNewChannelFormOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
+  const { oauth, setOauth } = useContext(
+    Context
+  );
 
   const openForm = () => {
     setNewChannelFormOpen(true);
+    //console.log("oauth.email = " + oauth.email);
   };
 
   const createChannel = async () => {
@@ -80,6 +85,8 @@ export default () => {
 
     await axios.post(`http://localhost:3001/channels`, {
       name: newChannelName,
+      owner: oauth.email,
+      members: [],
     });
 
     //setNewChannelName("");

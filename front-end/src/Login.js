@@ -13,7 +13,7 @@ import Context from "./Context";
 import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { orange, purple } from "@material-ui/core/colors";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -86,11 +86,18 @@ const Redirect = ({ config, codeVerifier }) => {
   };
   return (
     <div css={styles.root}>
-      <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-        <Grid container item xs={10} justify="center" >
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        spacing={5}
+      >
+        <Grid container item xs={10} justify="center">
           <h1 css={styles.title}>
             Hang out, anytime, anywhere.<br></br>
-            FireChat is a simple messenger app built with JavaScript, Node.js and React.<br></br>
+            FireChat is a simple messenger app built with JavaScript, Node.js
+            and React.<br></br>
             It makes it easy and fun to stay close to your favorite people.
           </h1>
         </Grid>
@@ -179,7 +186,21 @@ export default ({ onUser }) => {
           );
           removeCookie("code_verifier");
           setOauth(data);
-          // window.location = '/'
+
+          // Add user to db if it doesn't exist yet
+          const { data: users } = await axios.get(
+            `http://localhost:3001/users`
+          );
+
+          if (users.some((item) => item.username === data.email) === true) {
+            console.log("User already in DB");
+          } else {
+            await axios.post(`http://localhost:3001/users`, {
+              username: data.email,
+            });
+          }
+
+          //window.location = '/'
           history.push("/");
         } catch (err) {
           console.error(err);
