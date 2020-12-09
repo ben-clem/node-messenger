@@ -2,4 +2,4 @@
 **/.DS_Store
 /back-end/db
 **/dex
-**.insyncdl
+*.insyncdl
