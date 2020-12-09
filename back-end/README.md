@@ -19,3 +19,15 @@ Run the tests with mocha:
 ```bash
 npm run test
 ```
+
+Init with 3 channels:
+
+```bash
+bin/inti
+```
+
+Reset the DB:
+
+```bash
+bin/resset
+```

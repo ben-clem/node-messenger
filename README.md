@@ -105,9 +105,9 @@ Project management
 Application development
 
 - Welcome screens  
-  Customized login screen
+  - Customized login screen
 - New channel creation  
-  _place your comments_
+  - Create channel button + dialog (works with enter key)
 - Channel membership and access  
   _place your comments_
 - Ressource access control  

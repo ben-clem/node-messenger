@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
 - Missing "leave channel" button (go back to menu)
 
+### Added
+
+- Customized login screen and worked and looks
+- Create channel button + dialog (works with enter key)
 
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 
