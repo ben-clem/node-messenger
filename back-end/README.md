@@ -1,4 +1,3 @@
-
 # Back end
 
 - Node.js server
@@ -8,26 +7,32 @@
 
 ## Usage
 
-Start the back end:
+- Start the back end:
 
-```bash
-bin/start
-```
+  ```bash
+  bin/start
+  ```
 
-Run the tests with mocha:
+- Start the back end with hot-reload for easier development:
 
-```bash
-npm run test
-```
+  ```bash
+  nodemon --exec "node" bin/start
+  ```
 
-Init with 3 channels:
+- Run the tests with mocha:
 
-```bash
-bin/inti
-```
+  ```bash
+  npm run test
+  ```
 
-Reset the DB:
+- Init with 3 channels:
 
-```bash
-bin/resset
-```
+  ```bash
+  bin/inti
+  ```
+
+- Reset the DB:
+
+  ```bash
+  bin/resset
+  ```
