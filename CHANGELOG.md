@@ -14,12 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Messages always posted as david no matter who is logged in
 - Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
 - Missing "leave channel" button (go back to menu)
+- When inviting new users with email at channel creation:
+    - former email still visible when inviting a second user
+    - invited users don't show among selected / unselected ones
 
 ### Added
 
 - Customized login screen and worked and looks
 - Create channel button + dialog (works with enter key)
 - Adding known users to a channel when creating it
+- Inviting new users via email
 
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 

@@ -91,6 +91,8 @@ export default () => {
   const { oauth, setOauth } = useContext(Context);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [inviteMemberOpen, setInviteMemberOpen] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
 
   const openForm = () => {
     setNewChannelFormOpen(true);
@@ -131,6 +133,22 @@ export default () => {
     setUsers(users);
   };
 
+  const handleInviteMemberClick = () => {
+    setInviteMemberOpen(true);
+  };
+
+  const inviteMember = () => {
+    setInviteMemberOpen(false);
+
+    if (selectedUsers.includes(newEmail)) {
+      // do nothing
+    } else {
+      setSelectedUsers([...selectedUsers, newEmail]);
+    }
+
+    //setNewEmail("");
+  };
+
   return (
     <div css={styles.root}>
       {/* New Channel Form */}
@@ -154,12 +172,13 @@ export default () => {
             <ColorTextField
               autoFocus
               id="name"
-              label="Name"
+              label="Channel name"
               type="text"
               fullWidth
               color="primary"
               value={newChannelName}
               onChange={(e) => setNewChannelName(e.target.value)}
+              required
             />
 
             <DialogTitle id="form-dialog-title-2">
@@ -199,6 +218,16 @@ export default () => {
                 }
                 /* } */
               )}
+
+              {/* Invite a member who is not in DB */}
+              <ListItem autoFocus button onClick={handleInviteMemberClick}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <AddIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Invite member" />
+              </ListItem>
             </List>
           </DialogContent>
 
@@ -219,7 +248,53 @@ export default () => {
         </form>
       </Dialog>
 
-      {/* New Channel Form */}
+      {/* Second dialog for entering inviting member email */}
+      <Dialog
+        open={inviteMemberOpen}
+        onClose={() => {
+          setInviteMemberOpen(false);
+        }}
+        aria-labelledby="form-dialog-title"
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            inviteMember();
+          }}
+        >
+          <DialogContent>
+          <DialogTitle>
+            Please enter the email of the user you want to invite:
+          </DialogTitle>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email Address"
+              type="email"
+              fullWidth
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            {
+              <Button
+                onClick={() => {
+                  setInviteMemberOpen(false);
+                  setNewEmail("");
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+            }
+            <ColorButton type="submit" color="primary">
+              Invite member
+            </ColorButton>
+          </DialogActions>
+        </form>
+      </Dialog>
 
       {/* Buttons */}
       <Grid

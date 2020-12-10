@@ -107,8 +107,9 @@ Application development
 - Welcome screens  
   - Customized login screen
 - New channel creation  
-  - Create channel button + dialog (works with enter key)
-  - Adding known users to a channel when creating it
+  - Create channel button opens dialog
+  - Adding known users to a channel when creating it (dynamicaly selecting /deselecting them)
+  - Inviting new users via email
 - Channel membership and access  
   _place your comments_
 - Ressource access control  

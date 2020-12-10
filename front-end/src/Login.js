@@ -174,7 +174,7 @@ export default ({ onUser }) => {
     useEffect(() => {
       const fetch = async () => {
         try {
-          const { data } = await axios.post(
+          const { data : fetchOauth } = await axios.post(
             config.token_endpoint,
             qs.stringify({
               grant_type: "authorization_code",
@@ -185,25 +185,29 @@ export default ({ onUser }) => {
             })
           );
           removeCookie("code_verifier");
-          setOauth(data);
+          setOauth(fetchOauth);
 
-          // Add user to db if it doesn't exist yet
-          const { data: users } = await axios.get(
-            `http://localhost:3001/users`
-          );
+          try {
+            // Add user to db if it doesn't exist yet
+            const { data: users } = await axios.get(
+              `http://localhost:3001/users`
+            );
 
-          if (users.some((item) => item.username === data.email) === true) {
-            console.log("User already in DB");
-          } else {
-            await axios.post(`http://localhost:3001/users`, {
-              username: data.email,
-            });
+            if (users.some((item) => item.username === fetchOauth.email) === true) {
+              console.log("User already in DB");
+            } else {
+              await axios.post(`http://localhost:3001/users`, {
+                username: fetchOauth.email,
+              });
+            }
+          } catch (err) {
+            console.error("Error in checking if user is in DB / adding it" + err);
           }
 
           //window.location = '/'
           history.push("/");
         } catch (err) {
-          console.error(err);
+          console.error("Error in oauth fetching" + err);
         }
       };
       fetch();
