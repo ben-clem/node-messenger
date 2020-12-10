@@ -14,6 +14,7 @@ import {
   Typography,
   Grid,
 } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const useStyles = (theme) => ({
   header: {
@@ -31,6 +32,12 @@ const useStyles = (theme) => ({
       marginBottom: "",
     },
   },
+  title: {
+    cursor: "pointer",
+  },
+  logout: {
+    cursor: "pointer",
+  },
 });
 
 export default ({ drawerToggleListener }) => {
@@ -45,13 +52,31 @@ export default ({ drawerToggleListener }) => {
     e.stopPropagation();
     setOauth(null);
   };
+  const history = useHistory();
+
   return (
     <Card css={styles.header} square variant="outlined">
       <Grid container spacing={0}>
         <Grid item xs={12}>
-          <Typography variant="h3" component="h3" align="center">
-            FireChat 🔥
-          </Typography>
+          
+          <Link
+            href="#"
+            component="h3"
+            variant="h3"
+            align="center"
+            color="initial"
+            underline="none"
+            css={styles.title}
+            onClick={(e) => {
+              e.preventDefault();
+              history.push("/channels");
+            }}
+          >
+            
+              FireChat <span>🔥</span>
+            
+          </Link>
+
         </Grid>
 
         {oauth ? (
@@ -69,7 +94,10 @@ export default ({ drawerToggleListener }) => {
 
             <Grid item xs={10} sm={12}>
               <p css={styles.email}>
-                {oauth.email} <Link onClick={onClickLogout} color="error">(logout)</Link>
+                {oauth.email}{" "}
+                <Link onClick={onClickLogout} color="error" underline="none" css={styles.logout}>
+                  (logout)
+                </Link>
               </p>
             </Grid>
           </Grid>

@@ -1,8 +1,10 @@
-import {
+import React, {
   forwardRef,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
+  useState,
+  useEffect,
 } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
@@ -21,6 +23,19 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import { orange } from "@material-ui/core/colors";
+import axios from "axios";
+import { merge } from "mixme";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import PersonIcon from "@material-ui/icons/Person";
+import AddIcon from "@material-ui/icons/Add";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = (theme) => ({
   root: {
@@ -81,6 +96,7 @@ dayjs.updateLocale("en", {
 
 export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const styles = useStyles(useTheme());
+
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
     scroll: scroll,
@@ -90,6 +106,7 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const scroll = () => {
     scrollEl.current.scrollIntoView();
   };
+
   // See https://dev.to/n8tb1t/tracking-scroll-position-with-react-hooks-3bbj
   const throttleTimeout = useRef(null); // react-hooks/exhaustive-deps
   useLayoutEffect(() => {
@@ -108,7 +125,34 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
     return () => rootNode.removeEventListener("scroll", handleScroll);
   });
 
-  
+  /* ----------------------------------------------------------------------- */
+
+  const [members, setMembers] = useState([]);
+const [owner, setOwner] = useState("");
+
+  const [membersDialogOpen, setMembersDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const queryString = window.location.pathname;
+      const channelID = queryString.slice(10);
+
+      const { data: channel } = await axios.get(
+        `http://localhost:3001/channels/${channelID}`
+      );
+
+
+      /* const newOwnerString = `${channel.owner} (owner)`;
+      console.log("newOwnerString: " + newOwnerString);
+
+      setMembers([newOwnerString, ...channel.members]); */
+
+      setMembers(channel.members);
+      setOwner(channel.owner);
+
+    };
+    getUsers();
+  }, []);
 
   return (
     <div css={styles.root} ref={rootEl}>
@@ -123,9 +167,13 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
           <h1>{channel.name}</h1>
         </Grid>
         <Grid item>
-          <Tooltip title="members" arrow>
-            <ColorButton>Channel Members</ColorButton>
-          </Tooltip>
+          <ColorButton
+            onClick={() => {
+              setMembersDialogOpen(true);
+            }}
+          >
+            Members
+          </ColorButton>
         </Grid>
       </Grid>
 
@@ -149,6 +197,63 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
         })}
       </ul>
       <div ref={scrollEl} />
+
+      <Dialog
+        open={membersDialogOpen}
+        onClose={() => {
+          setMembersDialogOpen(false);
+        }}
+        aria-labelledby="form-dialog-title"
+      >
+          <DialogContent>
+            <List>
+              {console.log("members: " + members)}
+
+              {members.map(
+                (member) => {
+                  return (
+                    <ListItem
+                      button
+                      key={member}
+                    >
+                      <ListItemAvatar>
+                        <Avatar className={styles.avatar}>
+                          <PersonIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      {
+                      member === owner
+                          ? <ListItemText primary={`${member} (owner)`} />
+                          : <ListItemText primary={member} />
+                          }
+                      
+                    </ListItem>
+                  );
+                }
+              )}
+
+              {/* Invite a member who is not in DB */}
+              {/* <ListItem autoFocus button onClick={handleInviteMemberClick}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <AddIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Invite member" />
+              </ListItem> */}
+            </List>
+          </DialogContent>
+
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setMembersDialogOpen(false);
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+      </Dialog>
     </div>
   );
 });

@@ -108,14 +108,16 @@ Application development
   - Customized login screen
 - New channel creation  
   - Create channel button opens dialog
-  - Adding known users to a channel when creating it (dynamicaly selecting /deselecting them)
+  - Adding known users to a channel when creating it (dynamically selecting /deselecting them)
   - Inviting new users via email
+  - Forms are secured to prevent unwanted user behaviors
 - Channel membership and access  
-  _place your comments_
+  - Users are added to DB when logging for the first time
+  - Users are registered as owner when creating a channel
 - Ressource access control  
   _place your comments_
 - Invite users to channels  
-  _place your comments_
+  -
 - Message modification  
   _place your comments_
 - Message removal  

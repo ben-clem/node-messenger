@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { ReactComponent as ChannelIcon } from "./icons/channel.svg";
 import { ReactComponent as FriendsIcon } from "./icons/friends.svg";
 import { ReactComponent as SettingsIcon } from "./icons/settings.svg";
-import { Button } from "@material-ui/core";
+import { Button, unstable_createMuiStrictModeTheme } from "@material-ui/core";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -25,6 +25,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import { blue } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
+import { v4 as uuid } from 'uuid';
 
 const useStyles = (theme) => ({
   root: {
@@ -107,7 +108,7 @@ export default () => {
     await axios.post(`http://localhost:3001/channels`, {
       name: newChannelName,
       owner: oauth.email,
-      members: selectedUsers,
+      members: [oauth.email, ...selectedUsers],
     });
 
     //setNewChannelName("");
@@ -130,7 +131,7 @@ export default () => {
     } else {
       setSelectedUsers([...selectedUsers, user.username]);
     }
-    setUsers(users);
+    //setUsers(users);
   };
 
   const handleInviteMemberClick = () => {
@@ -138,15 +139,16 @@ export default () => {
   };
 
   const inviteMember = () => {
-    setInviteMemberOpen(false);
 
     if (selectedUsers.includes(newEmail)) {
       // do nothing
     } else {
       setSelectedUsers([...selectedUsers, newEmail]);
+      setUsers([...users, {username: newEmail, id: uuid()}]);
     }
 
-    //setNewEmail("");
+    setInviteMemberOpen(false);
+    setNewEmail("");
   };
 
   return (
@@ -156,6 +158,11 @@ export default () => {
         open={newChannelFormOpen}
         onClose={() => {
           setNewChannelFormOpen(false);
+          setNewChannelName("");
+          setUsers([]);
+          setSelectedUsers([]);
+          setInviteMemberOpen(false);
+          setNewEmail("");
         }}
         aria-labelledby="form-dialog-title"
       >
@@ -189,7 +196,7 @@ export default () => {
             <List>
               {users.map(
                 (user) => {
-                  /* if (user.username != oauth.email) { */
+                  if (user.username != oauth.email) {
                   return (
                     <ListItem
                       button
@@ -216,7 +223,7 @@ export default () => {
                     </ListItem>
                   );
                 }
-                /* } */
+                 } 
               )}
 
               {/* Invite a member who is not in DB */}
@@ -235,7 +242,11 @@ export default () => {
             <Button
               onClick={() => {
                 setNewChannelFormOpen(false);
+                setNewChannelName("");
+                setUsers([]);
                 setSelectedUsers([]);
+                setInviteMemberOpen(false);
+                setNewEmail("");
               }}
               color="error"
             >
@@ -253,6 +264,7 @@ export default () => {
         open={inviteMemberOpen}
         onClose={() => {
           setInviteMemberOpen(false);
+          setNewEmail("");
         }}
         aria-labelledby="form-dialog-title"
       >
@@ -266,7 +278,7 @@ export default () => {
           <DialogTitle>
             Please enter the email of the user you want to invite:
           </DialogTitle>
-            <TextField
+            <ColorTextField
               autoFocus
               margin="dense"
               id="email"
@@ -275,6 +287,7 @@ export default () => {
               fullWidth
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
+              required
             />
           </DialogContent>
           <DialogActions>
