@@ -34,6 +34,7 @@ app.get("/", authenticate, (req, res) => {
 /* get channels => db list channels */
 app.get("/channels", authenticate, async (req, res) => {
   const channels = await db.channels.list();
+  // TODO faire le tri entre les channels que l'user a le droit de voir
   res.json(channels);
 });
 
@@ -46,6 +47,7 @@ app.post("/channels", authenticate, async (req, res) => {
 /* get channels:id => db get channel */
 app.get("/channels/:id", authenticate, async (req, res) => {
   const channel = await db.channels.get(req.params.id);
+  // TODO check si l'user a le droit de voir cette channel
   res.json(channel);
 });
 
