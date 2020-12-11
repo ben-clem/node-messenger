@@ -50,8 +50,9 @@ export default ({ addMessage, channel }) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${oauth.access_token}`,
-        },
+          'Authorization': `Bearer ${oauth.access_token}`,
+          'email': oauth.email
+        }
       }
     );
     addMessage(message);

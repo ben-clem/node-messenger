@@ -170,8 +170,9 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
         `http://localhost:3001/channels/${channelID}`,
         {
           headers: {
-            Authorization: `Bearer ${oauth.access_token}`,
-          },
+            'Authorization': `Bearer ${oauth.access_token}`,
+            'email': oauth.email
+          }
         }
       );
 
@@ -196,8 +197,9 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${oauth.access_token}`,
-          },
+            'Authorization': `Bearer ${oauth.access_token}`,
+            'email': oauth.email
+          }
         }
       );
 

@@ -111,8 +111,9 @@ export default () => {
       members: [oauth.email, ...selectedUsers],
     }, {
       headers: {
-        Authorization: `Bearer ${oauth.access_token}`,
-      },
+        'Authorization': `Bearer ${oauth.access_token}`,
+        'email': oauth.email
+      }
     });
 
     //setNewChannelName("");
@@ -122,8 +123,9 @@ export default () => {
   const getUsers = async () => {
     const { data: users } = await axios.get(`http://localhost:3001/users`, {
       headers: {
-        Authorization: `Bearer ${oauth.access_token}`,
-      },
+        'Authorization': `Bearer ${oauth.access_token}`,
+        'email': oauth.email
+      }
     });
     setUsers(users);
   };

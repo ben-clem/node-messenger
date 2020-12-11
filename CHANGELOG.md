@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show members button inside channel and tell which one is the owner
 - Adding a member inside a channel (had to configure CORS preflight requests handling server side for PUT requests)
 - Each API request require the user to be logged in
+- User can only see / post to / invite to channels for which he is the owner or one of the members
+- Appropriate HTTP response codes and messages for each case
 
 ### Fixed
 

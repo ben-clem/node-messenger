@@ -130,8 +130,8 @@ _How to start and use the application, run the tests, ..._
 
 - Ressource access control
 
-  - **MISSING:** users can only see and post to channels when they are a member or the owner
-  - **MISSING:** appropriate HTTP response code and message.
+  - User can only see / post to / invite to channels for which he is the owner or one of the members
+  - Appropriate HTTP response codes and messages for each case
 
 - Invite users to channels
 
