@@ -38,7 +38,6 @@ _How to start and use the application, run the tests, ..._
    make examples
    ```
 
-
 3. **Register your GitHub application, get the clientID and clientSecret from GitHub and report them to your Dex configuration:**<br>
 
    Modify the provided `./dex-config/config.yml` configuration to look like:
@@ -106,14 +105,15 @@ _How to start and use the application, run the tests, ..._
 - Git and DevOps  
   _place your comments_
 
+### Application development
 
-### Application development
+- Welcome screens
 
-- Welcome screens  
   - Customized login screen
   - Worked on looks
 
-- New channel creation  
+- New channel creation
+
   - Create channel button opens dialog
   - Adding a name
   - Adding known users to a channel when creating it (dynamically selecting / deselecting them)
@@ -122,35 +122,44 @@ _How to start and use the application, run the tests, ..._
   - User can cancel at anytime or submit when the necessary info are provided
   - New channel is persisted in DB
 
-- Channel membership and access  
+- Channel membership and access
+
   - Users are added to DB when logging for the first time
   - User is registered as owner when creating a channel
   - **MISSING:** API requests check for auth (provided by Worms)
 
-- Ressource access control  
+- Ressource access control
+
   - **MISSING:** user can only see and post to channels when he is a member or the owner
   - **MISSING:** appropriate HTTP response code and message.
 
-- Invite users to channels  
+- Invite users to channels
+
   - Inviting known or new users at channel creation
   - **MISSING:** Inviting known or new users inside channel
 
-- Message modification  
+- Message modification
+
   - **MISSING:** The author of a message is able to modify its content
 
-- Message removal  
+- Message removal
+
   - **MISSING:** The author of a message is able to remove it
 
-- Account settings  
+- Account settings
+
   - **MISSING:** Create a screen for the user to modify his/her personal settings (email, name, language, theme, ...). Those properties don't have to be active. The goal is to display form components, persist their value and load the form components with new values. For example, a switch component to select between a day and night theme illustrates how to use the switch component. On save, the value must be persisted and the switch component must reflect it. You don't have to update the overall theme UI to reflect this value. If you do, it is part of the bonus and you must mention it in the readme.
 
-- Gravatar integration  
+- Gravatar integration
+
   - **MISSING:** Use an existing component or build your own, it is very easy to integrate and it will provide a default random image if the user email is not registered.
 
-- Avatar selection  
+- Avatar selection
+
   - **MISSING:** Provide the user with the possibility to choose an avatar from a selection you provide. The screen presenting this selection can be proposed once the user logged in for the first time (when the user account was not yet present inside the database and was created) or when the user edits his/her settings.
 
-- Personal custom avatar  
+- Personal custom avatar
+
   - **MISSING:** Offer the user the ability to upload his avatar in the form of an image (eg png, svg, ...). Ideally, the form must support drag and drop, filter the file type and restrict the file size.
 
 ## Bonus
