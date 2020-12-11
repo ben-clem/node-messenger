@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Messages always posted as david no matter who posted them
 - Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
 - Enter key in message form does not send but put new line
+- First time logging with Dex is not working
 
 ### Added
 
@@ -23,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inviting new users via email
 - Link to /channels on title
 - Show members button inside channel and tell which one is the owner
+- Adding a member inside a channel (had to configure CORS preflight requests handling server side for PUT requests)
 
 ### Fixed
 

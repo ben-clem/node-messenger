@@ -136,7 +136,7 @@ _How to start and use the application, run the tests, ..._
 - Invite users to channels
 
   - Inviting known or new users at channel creation
-  - **MISSING:** Inviting known or new users inside channel
+  - Inviting users inside a channel (had to configure CORS preflight requests handling server side for PUT requests)
 
 - Message modification
 

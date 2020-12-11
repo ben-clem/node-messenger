@@ -4,12 +4,17 @@ const cors = require("cors");
 const authenticator = require("./authenticator");
 
 const app = express();
+
 const authenticate = authenticator({
   jwks_uri: "http://127.0.0.1:5556/dex/keys",
 });
 
 app.use(require("body-parser").json());
-app.use(cors());
+
+/* WORKING CORS (including preflight) */
+app.use(cors({credentials: true, origin: true}))
+app.options('*', cors({credentials: true, origin: true})) // include before other routes
+
 
 app.get("/", (req, res) => {
   res.send(["<h1>ECE DevOps Chat</h1>"].join(""));

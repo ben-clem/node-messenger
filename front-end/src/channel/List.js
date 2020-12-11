@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import updateLocale from "dayjs/plugin/updateLocale";
 import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import { orange } from "@material-ui/core/colors";
 import axios from "axios";
@@ -86,6 +86,28 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
+const ColorTextField = withStyles((theme) => ({
+  root: {
+    "& label.Mui-focused": {
+      color: orange[500],
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: orange[500],
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "red",
+      },
+      "&:hover fieldset": {
+        borderColor: "yellow",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: orange[500],
+      },
+    },
+  },
+}))(TextField);
+
 dayjs.extend(calendar);
 dayjs.extend(updateLocale);
 dayjs.updateLocale("en", {
@@ -127,10 +149,14 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
 
   /* ----------------------------------------------------------------------- */
 
+  const [channelData, setChannelData] = useState({});
   const [members, setMembers] = useState([]);
-const [owner, setOwner] = useState("");
+  const [owner, setOwner] = useState("");
 
   const [membersDialogOpen, setMembersDialogOpen] = useState(false);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+
+  const [inviteEmail, setInviteEmail] = useState("");
 
   useEffect(() => {
     const getUsers = async () => {
@@ -141,18 +167,41 @@ const [owner, setOwner] = useState("");
         `http://localhost:3001/channels/${channelID}`
       );
 
-
-      /* const newOwnerString = `${channel.owner} (owner)`;
-      console.log("newOwnerString: " + newOwnerString);
-
-      setMembers([newOwnerString, ...channel.members]); */
-
+      setChannelData(channel);
       setMembers(channel.members);
       setOwner(channel.owner);
-
     };
     getUsers();
-  }, []);
+  }, [membersDialogOpen]);
+
+
+  const inviteMember = async () => {
+    if (members.includes(inviteEmail)) {
+      
+      setInviteEmail("! User already in channel !");
+
+    } else {
+
+      await axios.put(
+        `http://127.0.01:3001/channels/${channelData.id}`, {
+          name: channelData.name,
+          owner: channelData.owner,
+          members: [inviteEmail, ...members],
+          id: channelData.id,
+        }
+      );
+
+      setInviteEmail("");
+      setChannelData({});
+      setInviteDialogOpen(false);
+
+      setMembersDialogOpen(false);
+      setMembersDialogOpen(true);
+
+    }
+
+    
+  };
 
   return (
     <div css={styles.root} ref={rootEl}>
@@ -205,54 +254,103 @@ const [owner, setOwner] = useState("");
         }}
         aria-labelledby="form-dialog-title"
       >
-          <DialogContent>
-            <List>
-              {console.log("members: " + members)}
+        <DialogContent>
+          <List>
+            {console.log("members: " + members)}
 
-              {members.map(
-                (member) => {
-                  return (
-                    <ListItem
-                      button
-                      key={member}
-                    >
-                      <ListItemAvatar>
-                        <Avatar className={styles.avatar}>
-                          <PersonIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      {
-                      member === owner
-                          ? <ListItemText primary={`${member} (owner)`} />
-                          : <ListItemText primary={member} />
-                          }
-                      
-                    </ListItem>
-                  );
-                }
-              )}
+            {members.map((member) => {
+              return (
+                <ListItem button key={member}>
+                  <ListItemAvatar>
+                    <Avatar className={styles.avatar}>
+                      <PersonIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  {member === owner ? (
+                    <ListItemText primary={`${member} (owner)`} />
+                  ) : (
+                    <ListItemText primary={member} />
+                  )}
+                </ListItem>
+              );
+            })}
 
-              {/* Invite a member who is not in DB */}
-              {/* <ListItem autoFocus button onClick={handleInviteMemberClick}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <AddIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Invite member" />
-              </ListItem> */}
-            </List>
-          </DialogContent>
-
-          <DialogActions>
-            <Button
+            <ListItem
+              autoFocus
+              button
               onClick={() => {
-                setMembersDialogOpen(false);
+                setInviteDialogOpen(true);
               }}
             >
-              Close
-            </Button>
+              <ListItemAvatar>
+                <Avatar>
+                  <AddIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary="Invite member" />
+            </ListItem>
+          </List>
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setMembersDialogOpen(false);
+            }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Second dialog for inviting member */}
+      <Dialog
+        open={inviteDialogOpen}
+        onClose={() => {
+          setInviteDialogOpen(false);
+          setInviteEmail("");
+        }}
+        aria-labelledby="form-dialog-title"
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            inviteMember();
+          }}
+        >
+          <DialogContent>
+            <DialogTitle>
+              Please enter the email of the user you want to invite:
+            </DialogTitle>
+            <ColorTextField
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email Address"
+              type="email"
+              fullWidth
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            {
+              <Button
+                onClick={() => {
+                  setInviteDialogOpen(false);
+                  setInviteEmail("");
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+            }
+            <ColorButton type="submit" color="primary">
+              Invite member
+            </ColorButton>
           </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
