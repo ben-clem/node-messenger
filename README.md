@@ -126,7 +126,7 @@ _How to start and use the application, run the tests, ..._
 
   - Users are added to DB when logging for the first time
   - User is registered as owner when creating a channel
-  - **MISSING:** API requests check for auth (provided by Worms)
+  - Each API request require the user to be logged in (server check for access token)
 
 - Ressource access control
 

@@ -16,7 +16,7 @@ app.use(cors({credentials: true, origin: true}))
 app.options('*', cors({credentials: true, origin: true})) // include before other routes
 
 
-app.get("/", (req, res) => {
+app.get("/", authenticate, (req, res) => {
   res.send(["<h1>ECE DevOps Chat</h1>"].join(""));
 });
 
@@ -25,10 +25,10 @@ app.get("/", (req, res) => {
 //////////////
 
 /* Get channels without authentication for debugging */
-app.get("/channels", async (req, res) => {
+/* app.get("/channels", async (req, res) => {
   const channels = await db.channels.list();
   res.json(channels);
-});
+}); */
 /* --- */
 
 /* get channels => db list channels */
@@ -38,19 +38,19 @@ app.get("/channels", authenticate, async (req, res) => {
 });
 
 /* post channels => db create channel */
-app.post("/channels", async (req, res) => {
+app.post("/channels", authenticate, async (req, res) => {
   const channel = await db.channels.create(req.body);
   res.status(201).json(channel);
 });
 
 /* get channels:id => db get channel */
-app.get("/channels/:id", async (req, res) => {
+app.get("/channels/:id", authenticate, async (req, res) => {
   const channel = await db.channels.get(req.params.id);
   res.json(channel);
 });
 
 /* put channels:id => db update channel */
-app.put("/channels/:id", async (req, res) => {
+app.put("/channels/:id", authenticate, async (req, res) => {
   const channel = await db.channels.update(req.body);
   res.json(channel);
 });
@@ -59,12 +59,12 @@ app.put("/channels/:id", async (req, res) => {
 // Messages //
 //////////////
 
-app.get("/channels/:id/messages", async (req, res) => {
+app.get("/channels/:id/messages", authenticate, async (req, res) => {
   const messages = await db.messages.list(req.params.id);
   res.json(messages);
 });
 
-app.post("/channels/:id/messages", async (req, res) => {
+app.post("/channels/:id/messages", authenticate, async (req, res) => {
   const message = await db.messages.create(req.params.id, req.body);
   res.status(201).json(message);
 });
@@ -73,23 +73,23 @@ app.post("/channels/:id/messages", async (req, res) => {
 // Users //
 ///////////
 
-app.get("/users", async (req, res) => {
+app.get("/users", authenticate, async (req, res) => {
   const users = await db.users.list();
   res.json(users);
 });
 
 /* post users => db create user */
-app.post("/users", async (req, res) => {
+app.post("/users", authenticate, async (req, res) => {
   const user = await db.users.create(req.body);
   res.status(201).json(user);
 });
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", authenticate, async (req, res) => {
   const user = await db.users.get(req.params.id);
   res.json(user);
 });
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", authenticate, async (req, res) => {
   const user = await db.users.update(req.body);
   res.json(user);
 });

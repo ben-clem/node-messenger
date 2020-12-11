@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
   useEffect,
+  useContext,
 } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
@@ -36,6 +37,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Avatar from "@material-ui/core/Avatar";
+import Context from "../Context";
 
 const useStyles = (theme) => ({
   root: {
@@ -118,6 +120,7 @@ dayjs.updateLocale("en", {
 
 export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const styles = useStyles(useTheme());
+  const { oauth } = useContext(Context);
 
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
@@ -164,7 +167,12 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
       const channelID = queryString.slice(10);
 
       const { data: channel } = await axios.get(
-        `http://localhost:3001/channels/${channelID}`
+        `http://localhost:3001/channels/${channelID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${oauth.access_token}`,
+          },
+        }
       );
 
       setChannelData(channel);
@@ -174,20 +182,22 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
     getUsers();
   }, [membersDialogOpen]);
 
-
   const inviteMember = async () => {
     if (members.includes(inviteEmail)) {
-      
       setInviteEmail("! User already in channel !");
-
     } else {
-
       await axios.put(
-        `http://127.0.01:3001/channels/${channelData.id}`, {
+        `http://127.0.01:3001/channels/${channelData.id}`,
+        {
           name: channelData.name,
           owner: channelData.owner,
           members: [inviteEmail, ...members],
           id: channelData.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${oauth.access_token}`,
+          },
         }
       );
 
@@ -197,10 +207,7 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
 
       setMembersDialogOpen(false);
       setMembersDialogOpen(true);
-
     }
-
-    
   };
 
   return (
