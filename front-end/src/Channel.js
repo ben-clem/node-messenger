@@ -1,4 +1,4 @@
-import {useContext, useRef, useState} from 'react';
+import { useContext, useRef, useState } from 'react';
 import axios from 'axios';
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
@@ -32,9 +32,9 @@ const useStyles = (theme) => ({
 })
 
 export default () => {
+  const { oauth, channels } = useContext(Context)
   const history = useHistory()
   const { id } = useParams()
-  const {channels} = useContext(Context)
   const channel = channels.find( channel => channel.id === id)
   if(!channel) {
     history.push('/oups')
@@ -50,7 +50,12 @@ export default () => {
   }
   const fetchMessages = async () => {
     setMessages([])
-    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`)
+    const {data: messages} = await axios.get(`http://localhost:3001/channels/${channel.id}/messages`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`,
+        'email': oauth.email
+      }
+    })
     setMessages(messages)
     if(listRef.current){
       listRef.current.scroll()

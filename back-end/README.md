@@ -1,23 +1,38 @@
+# Back end
 
-# ECE WebTech Chat
-
-This is a chat application we wrote to learn the basics and the not so basics features of backend and frontend web programing. It leverages Node.js and React as well as complementary technologies such as unit testing with Mocha and Should.js, embeded storage with LevelDB, REST APIs, ... If we have time, we'll also play with GraphQL and Socket.io
+- Node.js server
+- Web API
+- Routing with Express
+- LevelDB database
 
 ## Usage
 
-Start the web application:
+- Start the back end:
 
-```bash
-./bin/start 
-Chat is waiting for you at http://localhost:3000
-```
+  ```bash
+  bin/start
+  ```
 
-Run the tests with mocha:
+- Start the back end with hot-reload for easier development:
 
-```bash
-npm run test
-```
+  ```bash
+  nodemon --exec "node" bin/start
+  ```
 
-## Instructions
+- Run the tests with mocha:
 
-See "../lab.md" for the lab instructions.
+  ```bash
+  npm run test
+  ```
+
+- Init with 3 channels:
+
+  ```bash
+  bin/inti
+  ```
+
+- Reset the DB:
+
+  ```bash
+  bin/resset
+  ```

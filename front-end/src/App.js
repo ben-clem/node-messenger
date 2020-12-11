@@ -8,6 +8,7 @@ import Header from './Header'
 import Main from './Main'
 import Login from './Login'
 import Context from './Context'
+import { useTheme } from "@material-ui/core/styles";
 // Rooter
 import {
   Switch,
@@ -16,17 +17,24 @@ import {
   useLocation
 } from "react-router-dom"
 
-const styles = {
+const useStyles = (theme) => ({
   root: {
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#565E71',
-    padding: '50px',
+    backgroundColor: 'rgb(48, 48, 47)',
+    padding: '30px',
+    [theme.breakpoints.down("xs")]: {
+      padding: '0px',
+    },
   },
-}
+
+});
 
 export default () => {
+
+  const styles = useStyles(useTheme());
+
   const location = useLocation()
   const {oauth} = useContext(Context)
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)

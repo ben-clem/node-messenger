@@ -38,7 +38,6 @@ _How to start and use the application, run the tests, ..._
    make examples
    ```
 
-
 3. **Register your GitHub application, get the clientID and clientSecret from GitHub and report them to your Dex configuration:**<br>
 
    Modify the provided `./dex-config/config.yml` configuration to look like:
@@ -89,43 +88,79 @@ _How to start and use the application, run the tests, ..._
 
 ## Tasks
 
-Project management
+### Project management
 
 - Naming convention  
   _place your comments_
+
 - Project structure  
   _place your comments_
+
 - Code quality  
   _place your comments_
+
 - Design, UX  
   _place your comments_
+
 - Git and DevOps  
   _place your comments_
 
-Application development
+### Application development
 
-- Welcome screens  
-  _place your comments_
-- New channel creation  
-  _place your comments_
-- Channel membership and access  
-  _place your comments_
-- Ressource access control  
-  _place your comments_
-- Invite users to channels  
-  _place your comments_
-- Message modification  
-  _place your comments_
-- Message removal  
-  _place your comments_
-- Account settings  
-  _place your comments_
-- Gravatar integration  
-  _place your comments_
-- Avatar selection  
-  _place your comments_
-- Personal custom avatar  
-  _place your comments_
+- Welcome screens
+
+  - Customized login screen
+  - Worked on looks
+
+- New channel creation
+
+  - Create channel button opens dialog
+  - Adding a name
+  - Adding known users to a channel when creating it (dynamically selecting / deselecting them)
+  - Inviting new users via email
+  - Forms are secured to prevent unwanted user behaviors
+  - User can cancel at anytime or submit when the necessary info are provided
+  - New channel is persisted in DB
+
+- Channel membership and access
+
+  - Users are added to DB when logging for the first time
+  - User is registered as owner when creating a channel
+  - Each API request require the user to be logged in (server check for access token)
+
+- Ressource access control
+
+  - User can only see / post to / invite to channels for which he is the owner or one of the members
+  - Appropriate HTTP response codes and messages for each case
+
+- Invite users to channels
+
+  - Inviting known or new users at channel creation
+  - Inviting users inside a channel (had to configure CORS preflight requests handling server side for PUT requests)
+
+- Message modification
+
+  - **MISSING:** The author of a message is able to modify its content
+
+- Message removal
+
+  - **MISSING:** The author of a message is able to remove it
+
+- Account settings
+
+  - **MISSING:** Create a screen for the user to modify his/her personal settings (email, name, language, theme, ...). Those properties don't have to be active. The goal is to display form components, persist their value and load the form components with new values. For example, a switch component to select between a day and night theme illustrates how to use the switch component. On save, the value must be persisted and the switch component must reflect it. You don't have to update the overall theme UI to reflect this value. If you do, it is part of the bonus and you must mention it in the readme.
+
+- Gravatar integration
+
+  - **MISSING:** Use an existing component or build your own, it is very easy to integrate and it will provide a default random image if the user email is not registered.
+
+- Avatar selection
+
+  - **MISSING:** Provide the user with the possibility to choose an avatar from a selection you provide. The screen presenting this selection can be proposed once the user logged in for the first time (when the user account was not yet present inside the database and was created) or when the user edits his/her settings.
+
+- Personal custom avatar
+
+  - **MISSING:** Offer the user the ability to upload his avatar in the form of an image (eg png, svg, ...). Ideally, the form must support drag and drop, filter the file type and restrict the file size.
 
 ## Bonus
 
