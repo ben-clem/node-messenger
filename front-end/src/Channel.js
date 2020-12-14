@@ -37,7 +37,7 @@ export default () => {
   const { id } = useParams()
   const channel = channels.find( channel => channel.id === id)
   if(!channel) {
-    history.push('/oups')
+    /* history.push('/oups') */
     return <div/>
   }
   const styles = useStyles(useTheme())
