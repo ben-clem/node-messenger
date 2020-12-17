@@ -108,6 +108,13 @@ app.post("/channels/:id/messages", authenticate, async (req, res) => {
 // Users //
 ///////////
 
+/* DEBUG */
+app.get("/users", async (req, res) => {
+  const users = await db.users.list();
+  res.json(users);
+});
+/*  */
+
 app.get("/users", authenticate, async (req, res) => {
   const users = await db.users.list();
   res.json(users);

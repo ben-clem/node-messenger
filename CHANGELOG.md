@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enter key in message form does not send but put new line
 - Messages date is always the one of the last message
 - No error message when trying to load an invalid channel ID
+- Load new channel after refresh when creating a channel
+
+- Messages infos (missing avatar, wrong name because of posting as david, ugly date)
+- Scroling hide channel info & form
 
 ### Added
 

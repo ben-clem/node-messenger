@@ -56,7 +56,7 @@ _How to start and use the application, run the tests, ..._
        clientSecret: xxxxxxxxx80e139441b637796b128d8xxxxxxxxx
        redirectURI: http://127.0.0.1:5556/dex/callback
    ```
-   **Now place it inside your dex folder.**<br><br>
+   **Now place the dex-config folder inside your dex folder.**<br><br>
    You should have a structure like this: `dex/dex-config/config.yml`.<br>
    The frond-end application is already registered and CORS is activated.
 
@@ -74,8 +74,6 @@ _How to start and use the application, run the tests, ..._
    cd back-end
    # Install dependencies (use yarn or npm)
    yarn install
-   # Optional, fill the database with initial data
-   bin/init
    # Start the back-end
    bin/start
    ```
