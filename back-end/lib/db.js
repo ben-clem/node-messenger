@@ -51,9 +51,9 @@ module.exports = {
   },
   messages: {
     create: async (channelId, message) => {
-      if (!channelId) throw Error("Invalid channel");
-      if (!message.author) throw Error("Invalid message");
-      if (!message.content) throw Error("Invalid message");
+      if (!channelId) throw Error("Missing channel");
+      if (!message.author) throw Error("Missing author");
+      if (!message.content) throw Error("Missing content");
       creation = microtime.now();
       await db.put(
         `messages:${channelId}:${creation}`,
