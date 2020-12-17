@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### To fix
 
-- Unable to reload page when on a channel
 - Messages always posted as david no matter who posted them
 - Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
 - First time logging with Dex is not working
 - Form is not autofocused when entering a channel
 - Enter key in message form does not send but put new line
+- Messages date is always the one of the last message
+- No error message when trying to load an invalid channel ID
 
 ### Added
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - former email still visible when inviting a second user
     - invited users don't show among selected / unselected ones
 - User creating a channel (future owner) is not shown among users to invite when creating channel
+- Unable to reload page when on a channel
 
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 
