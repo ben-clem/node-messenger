@@ -40,7 +40,12 @@ _How to start and use the application, run the tests, ..._
 
 3. **Register your GitHub application, get the clientID and clientSecret from GitHub and report them to your Dex configuration:**<br>
 
-   Modify the provided `./dex-config/config.yml` configuration to look like:
+   Go to https://github.com/settings/applications/new and enter the following:
+
+   Homepage URL: http://127.0.0.1:5556/dex<br>
+   Authorization callback URL: http://127.0.0.1:5556/dex/callback<br>
+
+   It should give you back your clientID and clientSecret and you can now modify the provided `./dex-config/config.yml` configuration to look like:
 
    ```yaml
    - type: github
@@ -51,8 +56,7 @@ _How to start and use the application, run the tests, ..._
        clientSecret: xxxxxxxxx80e139441b637796b128d8xxxxxxxxx
        redirectURI: http://127.0.0.1:5556/dex/callback
    ```
-
-   **And place it inside your dex folder.**<br>
+   **Now place it inside your dex folder.**<br><br>
    You should have a structure like this: `dex/dex-config/config.yml`.<br>
    The frond-end application is already registered and CORS is activated.
 
