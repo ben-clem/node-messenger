@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 // Layout
@@ -6,9 +6,8 @@ import { useTheme, withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { ReactComponent as ChannelIcon } from "./icons/channel.svg";
-import { ReactComponent as FriendsIcon } from "./icons/friends.svg";
 import { ReactComponent as SettingsIcon } from "./icons/settings.svg";
-import { Button, unstable_createMuiStrictModeTheme } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -23,9 +22,8 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
-import { blue } from "@material-ui/core/colors";
 import Avatar from "@material-ui/core/Avatar";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 const useStyles = (theme) => ({
   root: {
@@ -89,46 +87,11 @@ export default () => {
   const styles = useStyles(useTheme());
   const [newChannelFormOpen, setNewChannelFormOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
-  const { oauth, setOauth } = useContext(Context);
+  const { oauth } = useContext(Context);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [inviteMemberOpen, setInviteMemberOpen] = useState(false);
   const [newEmail, setNewEmail] = useState("");
-
-  const openForm = () => {
-    setNewChannelFormOpen(true);
-    //console.log("oauth.email = " + oauth.email);
-
-    getUsers();
-  };
-
-  const createChannel = async () => {
-    setNewChannelFormOpen(false);
-
-    await axios.post(`http://localhost:3001/channels`, {
-      name: newChannelName,
-      owner: oauth.email,
-      members: [oauth.email, ...selectedUsers],
-    }, {
-      headers: {
-        'Authorization': `Bearer ${oauth.access_token}`,
-        'email': oauth.email
-      }
-    });
-
-    //setNewChannelName("");
-    window.location.reload(false);
-  };
-
-  const getUsers = async () => {
-    const { data: users } = await axios.get(`http://localhost:3001/users`, {
-      headers: {
-        'Authorization': `Bearer ${oauth.access_token}`,
-        'email': oauth.email
-      }
-    });
-    setUsers(users);
-  };
 
   const handleListItemClick = (user) => {
     // Toggle: si l'user est déja séléctionné, le retirer, sinon, l'ajouter
@@ -144,182 +107,10 @@ export default () => {
     //setUsers(users);
   };
 
-  const handleInviteMemberClick = () => {
-    setInviteMemberOpen(true);
-  };
-
-  const inviteMember = () => {
-
-    if (selectedUsers.includes(newEmail)) {
-      // do nothing
-    } else {
-      setSelectedUsers([...selectedUsers, newEmail]);
-      setUsers([...users, {username: newEmail, id: uuid()}]);
-    }
-
-    setInviteMemberOpen(false);
-    setNewEmail("");
-  };
-
   return (
     <div css={styles.root}>
-      {/* New Channel Form */}
-      <Dialog
-        open={newChannelFormOpen}
-        onClose={() => {
-          setNewChannelFormOpen(false);
-          setNewChannelName("");
-          setUsers([]);
-          setSelectedUsers([]);
-          setInviteMemberOpen(false);
-          setNewEmail("");
-        }}
-        aria-labelledby="form-dialog-title"
-      >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            createChannel();
-          }}
-        >
-          <DialogContent>
-            <DialogTitle id="form-dialog-title">
-              Please enter the name of the new channel:
-            </DialogTitle>
-            <ColorTextField
-              autoFocus
-              id="name"
-              label="Channel name"
-              type="text"
-              fullWidth
-              color="primary"
-              value={newChannelName}
-              onChange={(e) => setNewChannelName(e.target.value)}
-              required
-            />
-
-            <DialogTitle id="form-dialog-title-2">
-              <br></br>
-              And select its members:
-            </DialogTitle>
-
-            <List>
-              {users.map(
-                (user) => {
-                  if (user.username != oauth.email) {
-                  return (
-                    <ListItem
-                      button
-                      onClick={() => handleListItemClick(user)}
-                      key={user.id}
-                      css={
-                        selectedUsers.includes(user.username)
-                          ? styles.listItemDone
-                          : styles.listItem
-                      }
-                    >
-                      {" "}
-                      {console.log(
-                        "selectedUsers.includes(user.username): " +
-                          selectedUsers.includes(user.username)
-                      )}
-                      {console.log("selectedUsers: " + selectedUsers)}
-                      <ListItemAvatar>
-                        <Avatar className={styles.avatar}>
-                          <PersonIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={user.username} />
-                    </ListItem>
-                  );
-                }
-                 } 
-              )}
-
-              {/* Invite a member who is not in DB */}
-              <ListItem autoFocus button onClick={handleInviteMemberClick}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <AddIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Invite member" />
-              </ListItem>
-            </List>
-          </DialogContent>
-
-          <DialogActions>
-            <Button
-              onClick={() => {
-                setNewChannelFormOpen(false);
-                setNewChannelName("");
-                setUsers([]);
-                setSelectedUsers([]);
-                setInviteMemberOpen(false);
-                setNewEmail("");
-              }}
-              color="error"
-            >
-              Cancel
-            </Button>
-            <ColorButton type="submit" color="primary">
-              Add channel
-            </ColorButton>
-          </DialogActions>
-        </form>
-      </Dialog>
-
-      {/* Second dialog for entering inviting member email */}
-      <Dialog
-        open={inviteMemberOpen}
-        onClose={() => {
-          setInviteMemberOpen(false);
-          setNewEmail("");
-        }}
-        aria-labelledby="form-dialog-title"
-      >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            inviteMember();
-          }}
-        >
-          <DialogContent>
-          <DialogTitle>
-            Please enter the email of the user you want to invite:
-          </DialogTitle>
-            <ColorTextField
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email Address"
-              type="email"
-              fullWidth
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            {
-              <Button
-                onClick={() => {
-                  setInviteMemberOpen(false);
-                  setNewEmail("");
-                }}
-                color="error"
-              >
-                Cancel
-              </Button>
-            }
-            <ColorButton type="submit" color="primary">
-              Invite member
-            </ColorButton>
-          </DialogActions>
-        </form>
-      </Dialog>
-
       {/* Buttons */}
+
       <Grid
         container
         direction="row"
@@ -327,9 +118,27 @@ export default () => {
         alignItems="center"
         spacing={5}
       >
+        {/* Create Channel */}
+
         <Grid item xs>
           <div css={styles.card}>
-            <Button onClick={openForm}>
+            <Button
+              onClick={async () => {
+                setNewChannelFormOpen(true);
+
+                const { data: users } = await axios.get(
+                  `http://localhost:3001/users`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${oauth.access_token}`,
+                      email: oauth.email,
+                    },
+                  }
+                );
+
+                setUsers(users);
+              }}
+            >
               <div css={styles.card}>
                 <ChannelIcon css={styles.icon} />
                 <Typography color="textPrimary">Create channel</Typography>
@@ -337,17 +146,196 @@ export default () => {
             </Button>
           </div>
         </Grid>
-        {/* To be placed inside channel
+
+        {/* New Channel Dialog Form */}
+        <Dialog
+          open={newChannelFormOpen}
+          onClose={() => {
+            setNewChannelFormOpen(false);
+            setNewChannelName("");
+            setUsers([]);
+            setSelectedUsers([]);
+            setInviteMemberOpen(false);
+            setNewEmail("");
+          }}
+          aria-labelledby="form-dialog-title"
+        >
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setNewChannelFormOpen(false);
+
+              await axios.post(
+                `http://localhost:3001/channels`,
+                {
+                  name: newChannelName,
+                  owner: oauth.email,
+                  members: [oauth.email, ...selectedUsers],
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${oauth.access_token}`,
+                    email: oauth.email,
+                  },
+                }
+              );
+
+              window.location.reload(false);
+            }}
+          >
+            <DialogContent>
+              <DialogTitle id="form-dialog-title">
+                Please enter the name of the new channel:
+              </DialogTitle>
+              <ColorTextField
+                autoFocus
+                id="name"
+                label="Channel name"
+                type="text"
+                fullWidth
+                color="primary"
+                value={newChannelName}
+                onChange={(e) => setNewChannelName(e.target.value)}
+                required
+              />
+
+              <DialogTitle id="form-dialog-title-2">
+                <br></br>
+                And select its members:
+              </DialogTitle>
+
+              <List>
+                {users.map((user) => {
+                  if (user.username !== oauth.email) {
+                    return (
+                      <ListItem
+                        button
+                        onClick={() => handleListItemClick(user)}
+                        key={user.id}
+                        css={
+                          selectedUsers.includes(user.username)
+                            ? styles.listItemDone
+                            : styles.listItem
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Avatar className={styles.avatar}>
+                            <PersonIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={user.username} />
+                      </ListItem>
+                    );
+                  } else {return(null);}
+                })}
+
+                {/* Invite a member who is not in DB */}
+                <ListItem
+                  autoFocus
+                  button
+                  onClick={() => {
+                    setInviteMemberOpen(true);
+                  }}
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AddIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Invite member" />
+                </ListItem>
+              </List>
+            </DialogContent>
+
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setNewChannelFormOpen(false);
+                  setNewChannelName("");
+                  setUsers([]);
+                  setSelectedUsers([]);
+                  setInviteMemberOpen(false);
+                  setNewEmail("");
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+              <ColorButton type="submit" color="primary">
+                Add channel
+              </ColorButton>
+            </DialogActions>
+          </form>
+        </Dialog>
+
+        {/* Second dialog for entering inviting member email */}
+        <Dialog
+          open={inviteMemberOpen}
+          onClose={() => {
+            setInviteMemberOpen(false);
+            setNewEmail("");
+          }}
+          aria-labelledby="form-dialog-title"
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (selectedUsers.includes(newEmail)) {
+                // do nothing
+              } else {
+                setSelectedUsers([...selectedUsers, newEmail]);
+                setUsers([...users, { username: newEmail, id: uuid() }]);
+              }
+
+              setInviteMemberOpen(false);
+              setNewEmail("");
+            }}
+          >
+            <DialogContent>
+              <DialogTitle>
+                Please enter the email of the user you want to invite:
+              </DialogTitle>
+              <ColorTextField
+                autoFocus
+                margin="dense"
+                id="email"
+                label="Email Address"
+                type="email"
+                fullWidth
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                required
+              />
+            </DialogContent>
+            <DialogActions>
+              {
+                <Button
+                  onClick={() => {
+                    setInviteMemberOpen(false);
+                    setNewEmail("");
+                  }}
+                  color="error"
+                >
+                  Cancel
+                </Button>
+              }
+              <ColorButton type="submit" color="primary">
+                Invite member
+              </ColorButton>
+            </DialogActions>
+          </form>
+        </Dialog>
+
+        {/* Settings */}
+
         <Grid item xs>
           <div css={styles.card}>
-            <FriendsIcon css={styles.icon} />
-            <Typography color="textPrimary">Invite friends</Typography>
-          </div>
-        </Grid> */}
-        <Grid item xs>
-          <div css={styles.card}>
-            <SettingsIcon css={styles.icon} />
-            <Typography color="textPrimary">Settings</Typography>
+            <Button /* onClick={} */>
+              <div css={styles.card}>
+                <SettingsIcon css={styles.icon} />
+                <Typography color="textPrimary">Settings</Typography>
+              </div>
+            </Button>
           </div>
         </Grid>
       </Grid>

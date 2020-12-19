@@ -28,7 +28,7 @@
 - Init with 3 channels:
 
   ```bash
-  bin/inti
+  bin/init
   ```
 
 - Reset the DB:
