@@ -24,11 +24,11 @@ app.get("/", authenticate, (req, res) => {
 //////////////
 
 /* Get channels without authentication for debugging */
-/* app.get("/channels", async (req, res) => {
+app.get("/channels", async (req, res) => {
   const channels = await db.channels.list();
   res.json(channels);
-}); */
-/* --- */
+});
+/* */
 
 /* get channels => db list channels */
 app.get("/channels", authenticate, async (req, res) => {
@@ -81,6 +81,13 @@ app.put("/channels/:id", authenticate, async (req, res) => {
 //////////////
 // Messages //
 //////////////
+
+/* DEBUG */
+app.get("/channels/:id/messages", async (req, res) => {
+  const messages = await db.messages.list(req.params.id);
+  res.status(200).json(messages); // OK
+});
+/*  */
 
 app.get("/channels/:id/messages", authenticate, async (req, res) => {
   const channel = await db.channels.get(req.params.id);

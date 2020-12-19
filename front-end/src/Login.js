@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import crypto from "crypto";
+import crypto, { randomBytes } from "crypto";
 import qs from "qs";
 import axios from "axios";
 /** @jsx jsx */
@@ -203,8 +203,12 @@ export default ({ onUser }) => {
             ) {
               console.log("User already in DB");
             } else {
+              const { data: random } = await axios.get(`https://randomuser.me/api/?inc=login&noinfo`);
+              console.log(random);
+              console.log(random.results[0].login.username);
               await axios.post(`http://localhost:3001/users`, {
-                username: fetchOauth.email,
+                email: fetchOauth.email,
+                username: random.results[0].login.username,
               },
               {
                 headers: {
