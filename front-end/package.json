@@ -17,6 +17,7 @@
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-gravatar": "^2.6.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "rehype-stringify": "^8.0.0",

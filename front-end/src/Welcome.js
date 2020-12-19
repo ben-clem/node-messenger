@@ -24,6 +24,10 @@ import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Avatar from "@material-ui/core/Avatar";
 import { v4 as uuid } from "uuid";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Link from "@material-ui/core/Link";
+import Gravatar from "react-gravatar";
 
 const useStyles = (theme) => ({
   root: {
@@ -61,6 +65,16 @@ const ColorButton = withStyles((theme) => ({
   },
 }))(Button);
 
+const BorderColorButton = withStyles((theme) => ({
+  root: {
+    color: "white",
+    borderColor: orange[500],
+    "&:hover": {
+      backgroundColor: orange[700],
+    },
+  },
+}))(Button);
+
 const ColorTextField = withStyles((theme) => ({
   root: {
     "& label.Mui-focused": {
@@ -83,15 +97,27 @@ const ColorTextField = withStyles((theme) => ({
   },
 }))(TextField);
 
+const ColorLink = withStyles((theme) => ({
+  root: {
+    color: orange[500],
+    cursor: "pointer",
+  },
+}))(Link);
+
 export default () => {
   const styles = useStyles(useTheme());
+
+  const { oauth } = useContext(Context);
+
   const [newChannelFormOpen, setNewChannelFormOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
-  const { oauth } = useContext(Context);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [inviteMemberOpen, setInviteMemberOpen] = useState(false);
   const [newEmail, setNewEmail] = useState("");
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [avatarButtonSelected, setAvatarButtonSelected] = useState(1); // 1: Gravatar, 2: selected avatar, 3: custom avatar
 
   const handleListItemClick = (user) => {
     // Toggle: si l'user est déja séléctionné, le retirer, sinon, l'ajouter
@@ -226,7 +252,9 @@ export default () => {
                         <ListItemText primary={user.username} />
                       </ListItem>
                     );
-                  } else {return(null);}
+                  } else {
+                    return null;
+                  }
                 })}
 
                 {/* Invite a member who is not in DB */}
@@ -257,7 +285,6 @@ export default () => {
                   setInviteMemberOpen(false);
                   setNewEmail("");
                 }}
-                color="error"
               >
                 Cancel
               </Button>
@@ -308,17 +335,15 @@ export default () => {
               />
             </DialogContent>
             <DialogActions>
-              {
-                <Button
-                  onClick={() => {
-                    setInviteMemberOpen(false);
-                    setNewEmail("");
-                  }}
-                  color="error"
-                >
-                  Cancel
-                </Button>
-              }
+              <Button
+                onClick={() => {
+                  setInviteMemberOpen(false);
+                  setNewEmail("");
+                }}
+              >
+                Cancel
+              </Button>
+
               <ColorButton type="submit" color="primary">
                 Invite member
               </ColorButton>
@@ -330,7 +355,11 @@ export default () => {
 
         <Grid item xs>
           <div css={styles.card}>
-            <Button /* onClick={} */>
+            <Button
+              onClick={() => {
+                setSettingsOpen(true);
+              }}
+            >
               <div css={styles.card}>
                 <SettingsIcon css={styles.icon} />
                 <Typography color="textPrimary">Settings</Typography>
@@ -338,6 +367,119 @@ export default () => {
             </Button>
           </div>
         </Grid>
+
+        {/* Settings Dialog */}
+
+        <Dialog
+          open={settingsOpen}
+          onClose={() => {
+            setSettingsOpen(false);
+          }}
+          aria-labelledby="form-dialog-title"
+          fullWidth="true"
+          maxWidth="md"
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setSettingsOpen(false);
+            }}
+          >
+            <DialogTitle>
+              <Typography
+                component="h5"
+                variant="h5"
+                align="center"
+                color="initial"
+              >
+                Settings
+              </Typography>
+            </DialogTitle>
+
+            <DialogTitle>Personal avatar:</DialogTitle>
+
+            <DialogContent>
+              <ButtonGroup
+                color="primary"
+                aria-label="outlined primary button group"
+                fullWidth
+              >
+                {avatarButtonSelected === 1 ? ( // Gravatar
+                  <ColorButton>Use Gravatar</ColorButton>
+                ) : (
+                  <BorderColorButton
+                    onClick={() => {
+                      setAvatarButtonSelected(1);
+                    }}
+                  >
+                    Use Gravatar
+                  </BorderColorButton>
+                )}
+
+                {avatarButtonSelected === 2 ? ( // selected avatar
+                  <ColorButton>Select from list</ColorButton>
+                ) : (
+                  <BorderColorButton
+                    onClick={() => {
+                      setAvatarButtonSelected(2);
+                    }}
+                  >
+                    Select from list
+                  </BorderColorButton>
+                )}
+
+                {avatarButtonSelected === 3 ? ( // custom avatar
+                  <ColorButton>Upload an image</ColorButton>
+                ) : (
+                  <BorderColorButton
+                    onClick={() => {
+                      setAvatarButtonSelected(3);
+                    }}
+                  >
+                    Upload an image
+                  </BorderColorButton>
+                )}
+              </ButtonGroup>
+
+              {avatarButtonSelected === 1 && ( // Gravatar
+                <div>
+                  <DialogContentText>
+                    <br></br>
+                    Your avatar will be automatically fetched from{" "}
+                    <ColorLink href="https://en.gravatar.com/" target="_blank">
+                      gravatar.com
+                    </ColorLink>
+                    . You can go there to update it.<br></br>
+                    If you don't set any, a default one will be provided based
+                    on your email.
+                    <br></br>
+                    Your current Gravatar:
+                  </DialogContentText>
+                  <Gravatar
+                    email={oauth.email}
+                    default="identicon"
+                    size={100}
+                    style={{ marginLeft: "10px", marginTop: "5px" }}
+                  />
+                </div>
+              )}
+            </DialogContent>
+
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setSettingsOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+
+              <ColorButton type="submit" color="primary">
+                Save settings
+              </ColorButton>
+            </DialogActions>
+          </form>
+        </Dialog>
       </Grid>
     </div>
   );
