@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No error message when trying to load an invalid channel ID
 - Should load new channel after refresh when created a new channel
 
+### Added
+
+- Avatars are shown at channel creation and in members list.
+
 ## [1.1.0](https://github.com/benzinho75/node-messenger/compare/v1.0.0...v1.1.0) - 2020-12-20
 
 ### Added

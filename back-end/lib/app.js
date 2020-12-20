@@ -24,10 +24,10 @@ app.get("/", (req, res) => {
 //////////////
 
 /* Get channels without authentication for debugging */
-app.get("/channels", async (req, res) => {
+/* app.get("/channels", async (req, res) => {
   const channels = await db.channels.list();
   res.json(channels);
-});
+}); */
 /* */
 
 /* get channels => db list channels */
@@ -83,10 +83,10 @@ app.put("/channels/:id", authenticate, async (req, res) => {
 //////////////
 
 /* DEBUG */
-app.get("/channels/:id/messages", async (req, res) => {
+/* app.get("/channels/:id/messages", async (req, res) => {
   const messages = await db.messages.list(req.params.id);
   res.status(200).json(messages); // OK
-});
+}); */
 /*  */
 
 app.get("/channels/:id/messages", authenticate, async (req, res) => {
@@ -126,10 +126,10 @@ app.delete("/channels/:id/messages", authenticate, async (req, res) => {
 ///////////
 
 /* DEBUG */
-app.get("/users", async (req, res) => {
+/* app.get("/users", async (req, res) => {
   const users = await db.users.list();
   res.json(users);
-});
+}); */
 /*  */
 
 app.get("/users", authenticate, async (req, res) => {

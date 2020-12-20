@@ -33,11 +33,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
-import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Avatar from "@material-ui/core/Avatar";
 import Context from "../Context";
 import Link from "@material-ui/core/Link";
+import AvatarSwitch from "../AvatarSwitch";
 
 const useStyles = (theme) => ({
   root: {
@@ -170,6 +170,8 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const [editing, setEditing] = useState({});
   const [newMessage, setNewMessage] = useState("");
 
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
     const getUsers = async () => {
       const queryString = window.location.pathname;
@@ -188,6 +190,15 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
       setChannelData(channel);
       setMembers(channel.members);
       setOwner(channel.owner);
+
+      const { data: users } = await axios.get(`http://localhost:3001/users`, {
+        headers: {
+          Authorization: `Bearer ${oauth.access_token}`,
+          email: oauth.email,
+        },
+      });
+
+      setUsers(users);
     };
     getUsers();
   }, [membersDialogOpen]);
@@ -302,14 +313,14 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
       >
         <DialogContent>
           <List>
-            {console.log("members: " + members)}
-
             {members.map((member) => {
+              const usr = users.filter((user) => user.email === member)[0];
+
               return (
                 <ListItem button key={member}>
                   <ListItemAvatar>
                     <Avatar className={styles.avatar}>
-                      <PersonIcon />
+                      <AvatarSwitch user={usr} email={member}></AvatarSwitch>
                     </Avatar>
                   </ListItemAvatar>
                   {member === owner ? (

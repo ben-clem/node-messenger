@@ -93,16 +93,20 @@ _How to start and use the application, run the tests, ..._
 ### Project management
 
 - Naming convention  
-  _place your comments_
+  Followed camel case convention and tried to be very descriptive in variable names.
 
 - Project structure  
-  _place your comments_
+  Kept provided project structure.
 
 - Code quality  
-  _place your comments_
+  Code formatted with Prettier.<br>
+  Tried to keep a natural and understable structure.
 
 - Design, UX  
-  _place your comments_
+  App is fully responsive.<br>
+  Used Material UI for a natural look and feel.<br>
+  Worked on colors to have a sort of brand identity.<br>
+  Tried to make it as simple as posible for the user.
 
 - Git and DevOps  
   _place your comments_
@@ -160,12 +164,12 @@ _How to start and use the application, run the tests, ..._
 - Gravatar integration
 
   - User can choose to use Gravatar in the settings dialog and his choice is saved in DB.
-  - **MISSING:** Gravatars should be displayed (channel creation, member invite, messages)
+  - Avatars are shown at channel creation and in members list.
 
 - Avatar selection
 
   - User can choose from a list of provided avatars in the settings section and his choice is saved in DB.
-  - **MISSING:** Avatars should be displayed (channel creation, member invite, messages)
+  - Avatars are shown at channel creation and in members list.
 
 - Personal custom avatar
 
