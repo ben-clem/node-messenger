@@ -51,9 +51,9 @@ module.exports = {
   },
   messages: {
     create: async (channelId, message) => {
-      if (!channelId) throw Error("Invalid channel");
-      if (!message.author) throw Error("Invalid message");
-      if (!message.content) throw Error("Invalid message");
+      if (!channelId) throw Error("Missing channel");
+      if (!message.author) throw Error("Missing author");
+      if (!message.content) throw Error("Missing content");
       creation = microtime.now();
       await db.put(
         `messages:${channelId}:${creation}`,
@@ -63,6 +63,13 @@ module.exports = {
         })
       );
       return merge(message, { channelId: channelId, creation: creation });
+    },
+    update: async (channelId, message) => {
+      if (!channelId) throw Error("Missing channel");
+      if (!message.author) throw Error("Missing author");
+      if (!message.content) throw Error("Missing content");
+      await db.put(`messages:${channelId}:${message.creation}`, JSON.stringify(message));
+      return merge(message, { channelId: channelId, creation: message.creation });
     },
     list: async (channelId) => {
       return new Promise((resolve, reject) => {
@@ -88,10 +95,16 @@ module.exports = {
           });
       });
     },
+    delete: async (channelId, message) => {
+      if (!channelId) throw Error("Missing channel ID");
+      if (!message.creation) throw Error("Missing message ID");
+      await db.del(`messages:${channelId}:${message.creation}`, JSON.stringify(message));
+      return merge(message, { channelId: channelId, creation: message.creation });
+    },
   },
   users: {
     create: async (user) => {
-      if (!user.username) throw Error("Invalid user");
+      if (!user.email) throw Error("Invalid user");
       const id = uuid();
       await db.put(`users:${id}`, JSON.stringify(user));
       return merge(user, { id: id });
@@ -122,10 +135,10 @@ module.exports = {
           });
       });
     },
-    update: (id, user) => {
-      const original = store.users[id];
-      if (!original) throw Error("Unregistered user id");
-      store.users[id] = merge(original, user);
+    update: async (user) => {
+      if (!user.id) throw Error("Invalid user");
+      await db.put(`users:${user.id}`, JSON.stringify(user));
+      return merge(user, { id: user.id });
     },
     delete: (id, user) => {
       const original = store.users[id];

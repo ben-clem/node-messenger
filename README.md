@@ -56,7 +56,7 @@ _How to start and use the application, run the tests, ..._
        clientSecret: xxxxxxxxx80e139441b637796b128d8xxxxxxxxx
        redirectURI: http://127.0.0.1:5556/dex/callback
    ```
-   **Now place it inside your dex folder.**<br><br>
+   **Now place the dex-config folder inside your dex folder.**<br><br>
    You should have a structure like this: `dex/dex-config/config.yml`.<br>
    The frond-end application is already registered and CORS is activated.
 
@@ -74,8 +74,6 @@ _How to start and use the application, run the tests, ..._
    cd back-end
    # Install dependencies (use yarn or npm)
    yarn install
-   # Optional, fill the database with initial data
-   bin/init
    # Start the back-end
    bin/start
    ```
@@ -144,23 +142,30 @@ _How to start and use the application, run the tests, ..._
 
 - Message modification
 
-  - **MISSING:** The author of a message is able to modify its content
+  - The author of a message is able to modify its content (modify dialog, messages put route, update in DB)
 
 - Message removal
 
-  - **MISSING:** The author of a message is able to remove it
+  - The author of a message is able to remove it (delete dialog, messages delete route, update in DB)
 
 - Account settings
 
-  - **MISSING:** Create a screen for the user to modify his/her personal settings (email, name, language, theme, ...). Those properties don't have to be active. The goal is to display form components, persist their value and load the form components with new values. For example, a switch component to select between a day and night theme illustrates how to use the switch component. On save, the value must be persisted and the switch component must reflect it. You don't have to update the overall theme UI to reflect this value. If you do, it is part of the bonus and you must mention it in the readme.
+  - A random username is automatically generated from https://randomuser.me/ API when logging for the first time. The user can later change it in the settings.
+  - Others settings are given a default value as well when logging for the first time.
+  - Buttons group for choosing between Gravatar, selection from list, or uploading an image.
+  - Choosing language between every available locales with autocomplete.
+  - Dark Theme switch (light theme not implemented).
+  - Settings are loaded from DB and updates are persisted in DB.
 
 - Gravatar integration
 
-  - **MISSING:** Use an existing component or build your own, it is very easy to integrate and it will provide a default random image if the user email is not registered.
+  - User can choose to use Gravatar in the settings dialog and his choice is saved in DB.
+  - **MISSING:** Gravatars should be displayed (channel creation, member invite, messages)
 
 - Avatar selection
 
-  - **MISSING:** Provide the user with the possibility to choose an avatar from a selection you provide. The screen presenting this selection can be proposed once the user logged in for the first time (when the user account was not yet present inside the database and was created) or when the user edits his/her settings.
+  - User can choose from a list of provided avatars in the settings section and his choice is saved in DB.
+  - **MISSING:** Avatars should be displayed (channel creation, member invite, messages)
 
 - Personal custom avatar
 

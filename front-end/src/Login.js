@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import crypto from "crypto";
+import crypto, { randomBytes } from "crypto";
 import qs from "qs";
 import axios from "axios";
 /** @jsx jsx */
@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { orange, purple } from "@material-ui/core/colors";
 import Grid from "@material-ui/core/Grid";
+import { enUS } from "@material-ui/core/locale";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -174,7 +175,7 @@ export default ({ onUser }) => {
     useEffect(() => {
       const fetch = async () => {
         try {
-          const { data : fetchOauth } = await axios.post(
+          const { data: fetchOauth } = await axios.post(
             config.token_endpoint,
             qs.stringify({
               grant_type: "authorization_code",
@@ -190,18 +191,40 @@ export default ({ onUser }) => {
           try {
             // Add user to db if it doesn't exist yet
             const { data: users } = await axios.get(
-              `http://localhost:3001/users`
+              `http://localhost:3001/users`,
+              {
+                headers: {
+                  Authorization: `Bearer ${fetchOauth.access_token}`
+                },
+              }
             );
 
-            if (users.some((item) => item.username === fetchOauth.email) === true) {
+            if (
+              users.some((item) => item.email === fetchOauth.email) === true
+            ) {
               console.log("User already in DB");
             } else {
+              const { data: random } = await axios.get(`https://randomuser.me/api/?inc=login&noinfo`);
+              console.log(random);
+              console.log(random.results[0].login.username);
               await axios.post(`http://localhost:3001/users`, {
-                username: fetchOauth.email,
+                email: fetchOauth.email,
+                username: random.results[0].login.username,
+                avatarChoice: 1,
+                avatarSelected: 6,
+                locale: "enUS",
+                darktheme: true,
+              },
+              {
+                headers: {
+                  'Authorization': `Bearer ${fetchOauth.access_token}`
+                }
               });
             }
           } catch (err) {
-            console.error("Error in checking if user is in DB / adding it" + err);
+            console.error(
+              "Error in checking if user is in DB / adding it" + err
+            );
           }
 
           //window.location = '/'

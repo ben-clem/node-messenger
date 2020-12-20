@@ -18,17 +18,16 @@ import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
 // Time
 import dayjs from "dayjs";
-import calendar from "dayjs/plugin/calendar";
-import updateLocale from "dayjs/plugin/updateLocale";
+import relativeTime from "dayjs/plugin/relativeTime";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import { orange } from "@material-ui/core/colors";
+import { grey, orange } from "@material-ui/core/colors";
 import axios from "axios";
-import { merge } from "mixme";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -38,6 +37,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Avatar from "@material-ui/core/Avatar";
 import Context from "../Context";
+import Link from "@material-ui/core/Link";
 
 const useStyles = (theme) => ({
   root: {
@@ -76,6 +76,9 @@ const useStyles = (theme) => ({
     top: 0,
     width: "50px",
   },
+  infos: {
+    color: "rgb(180, 180, 180)",
+  },
 });
 
 const ColorButton = withStyles((theme) => ({
@@ -110,13 +113,14 @@ const ColorTextField = withStyles((theme) => ({
   },
 }))(TextField);
 
-dayjs.extend(calendar);
-dayjs.extend(updateLocale);
-dayjs.updateLocale("en", {
-  calendar: {
-    sameElse: "DD/MM/YYYY hh:mm A",
+const ColorLink = withStyles((theme) => ({
+  root: {
+    color: "rgb(200, 125, 0)",
+    cursor: "pointer",
   },
-});
+}))(Link);
+
+dayjs.extend(relativeTime);
 
 export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const styles = useStyles(useTheme());
@@ -161,6 +165,11 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
 
   const [inviteEmail, setInviteEmail] = useState("");
 
+  const [modifyOpen, setModifyOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editing, setEditing] = useState({});
+  const [newMessage, setNewMessage] = useState("");
+
   useEffect(() => {
     const getUsers = async () => {
       const queryString = window.location.pathname;
@@ -170,9 +179,9 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
         `http://localhost:3001/channels/${channelID}`,
         {
           headers: {
-            'Authorization': `Bearer ${oauth.access_token}`,
-            'email': oauth.email
-          }
+            Authorization: `Bearer ${oauth.access_token}`,
+            email: oauth.email,
+          },
         }
       );
 
@@ -197,9 +206,9 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
         },
         {
           headers: {
-            'Authorization': `Bearer ${oauth.access_token}`,
-            'email': oauth.email
-          }
+            Authorization: `Bearer ${oauth.access_token}`,
+            email: oauth.email,
+          },
         }
       );
 
@@ -245,9 +254,37 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
           return (
             <li key={i} css={styles.message}>
               <p>
-                <span>{message.author}</span>
-                {" - "}
-                <span>{dayjs().calendar(message.creation)}</span>
+                <span css={styles.infos}>
+                  {message.author}
+                  {" - "}
+                  {dayjs((message.creation * 1) / 1000).fromNow()}
+
+                  {message.author === oauth.email ? (
+                    <span>
+                      {" - ("}
+                      <ColorLink
+                        onClick={() => {
+                          setModifyOpen(true);
+                          setEditing(message);
+                        }}
+                      >
+                        modify
+                      </ColorLink>
+                      {", "}
+                      <ColorLink
+                        onClick={() => {
+                          setDeleteOpen(true);
+                          setEditing(message);
+                        }}
+                      >
+                        delete
+                      </ColorLink>
+                      {")"}
+                    </span>
+                  ) : (
+                    <span></span>
+                  )}
+                </span>
               </p>
               <div dangerouslySetInnerHTML={{ __html: content }}></div>
             </li>
@@ -357,6 +394,135 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
             }
             <ColorButton type="submit" color="primary">
               Invite member
+            </ColorButton>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+      {/* Modifying message dialog */}
+      <Dialog
+        open={modifyOpen}
+        onClose={() => {
+          setEditing(null);
+          setModifyOpen(false);
+        }}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="md"
+      >
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            console.log(newMessage);
+            /* update message in DB */
+            const { data: result } = await axios.put(
+              `http://localhost:3001/channels/${channelData.id}/messages`,
+              {
+                content: newMessage,
+                author: editing.author,
+                channelId: editing.channelId,
+                creation: editing.creation,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${oauth.access_token}`,
+                  email: oauth.email,
+                },
+              }
+            );
+            /* close dialog */
+            setEditing(null);
+            setNewMessage("");
+            setModifyOpen(false);
+            window.location.reload(false);
+          }}
+        >
+          <DialogContent>
+            <ColorTextField
+              autoFocus
+              margin="dense"
+              id="newMessage"
+              label="New message:"
+              type="text"
+              fullWidth
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            {
+              <Button
+                onClick={() => {
+                  setEditing(null);
+                  setModifyOpen(false);
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+            }
+            <ColorButton type="submit" color="primary">
+              Modify message
+            </ColorButton>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+      {/* Deleting message dialog */}
+      <Dialog
+        open={deleteOpen}
+        onClose={() => {
+          setEditing(null);
+          setDeleteOpen(false);
+        }}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="sm"
+      >
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            /* delete message in DB */
+            const { data: result } = await axios.delete(
+              `http://localhost:3001/channels/${channelData.id}/messages`,
+              {
+                headers: {
+                  Authorization: `Bearer ${oauth.access_token}`,
+                  email: oauth.email,
+                },
+                data: {
+                  creation: editing.creation,
+                },
+              }
+            );
+            /* close dialog */
+            setEditing(null);
+            setDeleteOpen(false);
+            window.location.reload(false);
+          }}
+        >
+          <DialogTitle align="center">Delete this message?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this message?<br></br>
+              You won't be able to undo this action.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {
+              <Button
+                onClick={() => {
+                  setEditing(null);
+                  setDeleteOpen(false);
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+            }
+            <ColorButton type="submit" color="primary">
+              Yes, delete this message
             </ColorButton>
           </DialogActions>
         </form>
