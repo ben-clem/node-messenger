@@ -34,6 +34,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import AvatarSwitch from "./AvatarSwitch";
 
 const useStyles = (theme) => ({
   root: {
@@ -307,7 +308,10 @@ export default () => {
                       >
                         <ListItemAvatar>
                           <Avatar className={styles.avatar}>
-                            <PersonIcon />
+                            <AvatarSwitch
+                              user={user}
+                              email={user.email}
+                            ></AvatarSwitch>
                           </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={user.email} />
@@ -561,7 +565,7 @@ export default () => {
                   <Gravatar
                     email={oauth.email}
                     default="identicon"
-                    size={100}
+                    size={120}
                     style={{ marginLeft: "10px", marginTop: "5px" }}
                   />
                 </div>
@@ -631,6 +635,13 @@ export default () => {
                       </GridListTile>
                     </BorderColorButton2>
                   </GridList>
+                  <DialogContentText>
+                    <br></br>
+                    <span>Images by </span>
+                    <ColorLink target="_blank" href="https://icons8.com/icon/set/characters/officel">
+                      Icons8
+                    </ColorLink>
+                  </DialogContentText>
                 </div>
               )}
               {avatarButtonSelected === 3 && ( // Upload avatar

@@ -6,11 +6,11 @@ The goal of this project is to build a basic messaging web app.<br>
 It leverages Node.js and React as well as complementary technologies such as unit testing with Mocha and Should.js, embeded storage with LevelDB, REST APIs, ...<br>
 If we have time, we'll also play with GraphQL and Socket<span>.io.
 
-You can find the project instructions here: [INSTRUCTIONS.md](../master/INSTRUCTIONS.md)
+You can find the project instructions there: [INSTRUCTIONS.md](../master/INSTRUCTIONS.md)
 
 ## Changelog
 
-[CHANGELOG.md](../master/CHANGELOG.md)
+[CHANGELOG.md](../master/CHANGELOG.md) based on the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) convention.
 
 ## Usage
 
@@ -93,19 +93,26 @@ _How to start and use the application, run the tests, ..._
 ### Project management
 
 - Naming convention  
-  _place your comments_
+  - Followed camel case convention and tried to be very descriptive in variable names.
 
 - Project structure  
-  _place your comments_
+  - Kept provided project structure.
 
 - Code quality  
-  _place your comments_
+  - Code formatted with Prettier.
+  - Tried to keep a natural and understable structure.
 
 - Design, UX  
-  _place your comments_
+  - App is fully responsive.
+  - Used Material UI for a natural look and feel.
+  - Worked on colors and design to have a sort of brand identity.
+  - Tried to make it as simple as posible for the user.
 
 - Git and DevOps  
-  _place your comments_
+  - Worked on a develop branch where we commited frequently.
+  - Develop branch was merged into master then rebased to master regularly.
+  - Tried to have very accurate commit messages and documented every change in a [CHANGELOG](../master/CHANGELOG.md) based on the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) convention.
+  - Worked on the README.
 
 ### Application development
 
@@ -132,48 +139,45 @@ _How to start and use the application, run the tests, ..._
 
 - Ressource access control
 
-  - User can only see / post to / invite to channels for which he is the owner or one of the members
+  - Users can only see / post to / invite to channels for which they are the owner or one of the members
   - Appropriate HTTP response codes and messages for each case
 
 - Invite users to channels
 
-  - Inviting known or new users at channel creation
+  - Inviting known or new users at channel creation (dynamically selecting / deselecting them)
   - Inviting users inside a channel (had to configure CORS preflight requests handling server side for PUT requests)
 
 - Message modification
 
-  - The author of a message is able to modify its content (modify dialog, messages put route, update in DB)
+  - The author of a message is able to modify its content
 
 - Message removal
 
-  - The author of a message is able to remove it (delete dialog, messages delete route, update in DB)
+  - The author of a message is able to remove it
 
 - Account settings
 
   - A random username is automatically generated from https://randomuser.me/ API when logging for the first time. The user can later change it in the settings.
   - Others settings are given a default value as well when logging for the first time.
-  - Buttons group for choosing between Gravatar, selection from list, or uploading an image.
-  - Choosing language between every available locales with autocomplete.
+  - Buttons group for choosing between using Gravatar, selecting an avatar from list, or uploading an image.
+  - Choosing language between every existing locales with autocomplete.
   - Dark Theme switch (light theme not implemented).
   - Settings are loaded from DB and updates are persisted in DB.
 
 - Gravatar integration
 
-  - User can choose to use Gravatar in the settings dialog and his choice is saved in DB.
-  - **MISSING:** Gravatars should be displayed (channel creation, member invite, messages)
+  - User can choose to use Gravatar in the settings section and his choice is saved in DB.
+  - Avatars are shown at channel creation and in members list.
 
 - Avatar selection
 
   - User can choose from a list of provided avatars in the settings section and his choice is saved in DB.
-  - **MISSING:** Avatars should be displayed (channel creation, member invite, messages)
+  - Avatars are shown at channel creation and in members list.
 
 - Personal custom avatar
 
-  - **MISSING:** Offer the user the ability to upload his avatar in the form of an image (eg png, svg, ...). Ideally, the form must support drag and drop, filter the file type and restrict the file size.
+  - Did not have the time to do everything and chose to ignore this one as it seemed to be the longest feature to implement.
 
-## Bonus
-
-_place your comments_
 
 ## Authors
 
