@@ -142,11 +142,11 @@ _How to start and use the application, run the tests, ..._
 
 - Message modification
 
-  - The author of a message is able to modify its content (modify dialog, messages put route, mesages update in DB)
+  - The author of a message is able to modify its content (modify dialog, messages put route, update in DB)
 
 - Message removal
 
-  - **MISSING:** The author of a message is able to remove it
+  - The author of a message is able to remove it (delete dialog, messages delete route, update in DB)
 
 - Account settings
 

@@ -116,6 +116,11 @@ app.put("/channels/:id/messages", authenticate, async (req, res) => {
   res.status(201).json(user);
 });
 
+app.delete("/channels/:id/messages", authenticate, async (req, res) => {
+  const user = await db.messages.delete(req.params.id, req.body);
+  res.status(200).json(user);
+});
+
 ///////////
 // Users //
 ///////////

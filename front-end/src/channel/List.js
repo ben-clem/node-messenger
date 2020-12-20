@@ -27,6 +27,7 @@ import axios from "axios";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -273,7 +274,7 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
                       <ColorLink
                         onClick={() => {
                           setDeleteOpen(true);
-                          setEditing(message.id);
+                          setEditing(message);
                         }}
                       >
                         delete
@@ -463,6 +464,65 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
             }
             <ColorButton type="submit" color="primary">
               Modify message
+            </ColorButton>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+      {/* Deleting message dialog */}
+      <Dialog
+        open={deleteOpen}
+        onClose={() => {
+          setEditing(null);
+          setDeleteOpen(false);
+        }}
+        aria-labelledby="form-dialog-title"
+        fullWidth
+        maxWidth="sm"
+      >
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            /* delete message in DB */
+            const { data: result } = await axios.delete(
+              `http://localhost:3001/channels/${channelData.id}/messages`,
+              {
+                headers: {
+                  Authorization: `Bearer ${oauth.access_token}`,
+                  email: oauth.email,
+                },
+                data: {
+                  creation: editing.creation,
+                },
+              }
+            );
+            /* close dialog */
+            setEditing(null);
+            setDeleteOpen(false);
+            window.location.reload(false);
+          }}
+        >
+          <DialogTitle align="center">Delete this message?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this message?<br></br>
+              You won't be able to undo this action.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {
+              <Button
+                onClick={() => {
+                  setEditing(null);
+                  setDeleteOpen(false);
+                }}
+                color="error"
+              >
+                Cancel
+              </Button>
+            }
+            <ColorButton type="submit" color="primary">
+              Yes, delete this message
             </ColorButton>
           </DialogActions>
         </form>

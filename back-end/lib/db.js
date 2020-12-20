@@ -95,6 +95,12 @@ module.exports = {
           });
       });
     },
+    delete: async (channelId, message) => {
+      if (!channelId) throw Error("Missing channel ID");
+      if (!message.creation) throw Error("Missing message ID");
+      await db.del(`messages:${channelId}:${message.creation}`, JSON.stringify(message));
+      return merge(message, { channelId: channelId, creation: message.creation });
+    },
   },
   users: {
     create: async (user) => {
