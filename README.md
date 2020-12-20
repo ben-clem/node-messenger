@@ -150,13 +150,15 @@ _How to start and use the application, run the tests, ..._
 
 - Account settings
 
-  - **MISSING:** Create a screen for the user to modify his/her personal settings (email, name, language, theme, ...). Those properties don't have to be active. The goal is to display form components, persist their value and load the form components with new values. For example, a switch component to select between a day and night theme illustrates how to use the switch component. On save, the value must be persisted and the switch component must reflect it. You don't have to update the overall theme UI to reflect this value. If you do, it is part of the bonus and you must mention it in the readme.
   - A random username is automatically generated from https://randomuser.me/ API when logging for the first time. The user can later change it in the settings.
+  - Others settings are given a default value as well when logging for the first time.
   - Buttons group for choosing between Gravatar, selection from list, or uploading an image.
+  - Choosing language between every available locales with autocomplete.
+  - Dark Theme switch (light theme not implemented).
+  - Settings are loaded from DB and updates are persisted in DB.
 
 - Gravatar integration
 
-  - **MISSING:** Use an existing component or build your own, it is very easy to integrate and it will provide a default random image if the user email is not registered.
   - User can choose to use Gravatar in the settings dialog.
 
 - Avatar selection

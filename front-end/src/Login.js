@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { orange, purple } from "@material-ui/core/colors";
 import Grid from "@material-ui/core/Grid";
+import { enUS } from "@material-ui/core/locale";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -199,7 +200,7 @@ export default ({ onUser }) => {
             );
 
             if (
-              users.some((item) => item.username === fetchOauth.email) === true
+              users.some((item) => item.email === fetchOauth.email) === true
             ) {
               console.log("User already in DB");
             } else {
@@ -209,6 +210,9 @@ export default ({ onUser }) => {
               await axios.post(`http://localhost:3001/users`, {
                 email: fetchOauth.email,
                 username: random.results[0].login.username,
+                avatarChoice: 1,
+                locale: "enUS",
+                darktheme: true,
               },
               {
                 headers: {

@@ -18,14 +18,12 @@ import remark2rehype from "remark-rehype";
 import html from "rehype-stringify";
 // Time
 import dayjs from "dayjs";
-import calendar from "dayjs/plugin/calendar";
-import updateLocale from "dayjs/plugin/updateLocale";
+import relativeTime from "dayjs/plugin/relativeTime";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import { orange } from "@material-ui/core/colors";
 import axios from "axios";
-import { merge } from "mixme";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -110,13 +108,7 @@ const ColorTextField = withStyles((theme) => ({
   },
 }))(TextField);
 
-dayjs.extend(calendar);
-dayjs.extend(updateLocale);
-dayjs.updateLocale("en", {
-  calendar: {
-    sameElse: "DD/MM/YYYY hh:mm A",
-  },
-});
+dayjs.extend(relativeTime)
 
 export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
   const styles = useStyles(useTheme());
@@ -247,7 +239,7 @@ export default forwardRef(({ channel, messages, onScrollDown }, ref) => {
               <p>
                 <span>{message.author}</span>
                 {" - "}
-                <span>{dayjs().calendar(message.creation)}</span>
+                <span>{dayjs(message.creation * 1/1000).fromNow()}</span>
               </p>
               <div dangerouslySetInnerHTML={{ __html: content }}></div>
             </li>

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 // Layout
@@ -28,6 +28,10 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Link from "@material-ui/core/Link";
 import Gravatar from "react-gravatar";
+import * as locales from "@material-ui/core/locale";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = (theme) => ({
   root: {
@@ -104,6 +108,36 @@ const ColorLink = withStyles((theme) => ({
   },
 }))(Link);
 
+const ColorAutocomplete = withStyles((theme) => ({
+  root: {
+    "& label.Mui-focused": {
+      color: orange[500],
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: orange[500],
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: orange[500],
+      },
+    },
+  },
+}))(Autocomplete);
+
+const ColorSwitch = withStyles({
+  switchBase: {
+    color: orange[300],
+    "&$checked": {
+      color: orange[500],
+    },
+    "&$checked + $track": {
+      backgroundColor: orange[500],
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
+
 export default () => {
   const styles = useStyles(useTheme());
 
@@ -117,18 +151,35 @@ export default () => {
   const [newEmail, setNewEmail] = useState("");
 
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [username, setUsername] = useState("username");
   const [avatarButtonSelected, setAvatarButtonSelected] = useState(1); // 1: Gravatar, 2: selected avatar, 3: custom avatar
+  const [locale, setLocale] = useState("enUS");
+  const [darkTheme, setDarkTheme] = useState(true);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data: users } = await axios.get(`http://localhost:3001/users`, {
+        headers: {
+          Authorization: `Bearer ${oauth.access_token}`,
+        },
+      });
+      const usr = users.filter((user) => user.email === oauth.email);
+      setCurrentUser(usr[0]);
+    };
+    getCurrentUser();
+  }, []);
 
   const handleListItemClick = (user) => {
     // Toggle: si l'user est déja séléctionné, le retirer, sinon, l'ajouter
-    if (selectedUsers.includes(user.username)) {
+    if (selectedUsers.includes(user.email)) {
       setSelectedUsers(
         selectedUsers.filter(function (value, index, arr) {
-          return value !== user.username;
+          return value !== user.email;
         })
       );
     } else {
-      setSelectedUsers([...selectedUsers, user.username]);
+      setSelectedUsers([...selectedUsers, user.email]);
     }
     //setUsers(users);
   };
@@ -232,14 +283,14 @@ export default () => {
 
               <List>
                 {users.map((user) => {
-                  if (user.username !== oauth.email) {
+                  if (user.email !== oauth.email) {
                     return (
                       <ListItem
                         button
                         onClick={() => handleListItemClick(user)}
                         key={user.id}
                         css={
-                          selectedUsers.includes(user.username)
+                          selectedUsers.includes(user.email)
                             ? styles.listItemDone
                             : styles.listItem
                         }
@@ -249,7 +300,7 @@ export default () => {
                             <PersonIcon />
                           </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={user.username} />
+                        <ListItemText primary={user.email} />
                       </ListItem>
                     );
                   } else {
@@ -311,7 +362,7 @@ export default () => {
                 // do nothing
               } else {
                 setSelectedUsers([...selectedUsers, newEmail]);
-                setUsers([...users, { username: newEmail, id: uuid() }]);
+                setUsers([...users, { email: newEmail, id: uuid() }]);
               }
 
               setInviteMemberOpen(false);
@@ -372,17 +423,45 @@ export default () => {
 
         <Dialog
           open={settingsOpen}
+          onEnter={() => {
+            setUsername(currentUser.username);
+            setAvatarButtonSelected(currentUser.avatarChoice);
+            setLocale(currentUser.locale);
+            setDarkTheme(currentUser.darkTheme);
+          }}
           onClose={() => {
             setSettingsOpen(false);
           }}
           aria-labelledby="form-dialog-title"
-          fullWidth="true"
+          fullWidth
           maxWidth="md"
         >
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
+
+              const newUser = {
+                email: currentUser.email,
+                username: username,
+                id: currentUser.id,
+                avatarChoice: avatarButtonSelected,
+                locale: locale,
+                darkTheme: darkTheme,
+              };
+
+              await axios.put(
+                `http://localhost:3001/users/${currentUser.id}`,
+                newUser,
+                {
+                  headers: {
+                    Authorization: `Bearer ${oauth.access_token}`,
+                    email: oauth.email,
+                  },
+                }
+              );
+
               setSettingsOpen(false);
+              window.location.reload(false);
             }}
           >
             <DialogTitle>
@@ -396,9 +475,21 @@ export default () => {
               </Typography>
             </DialogTitle>
 
-            <DialogTitle>Personal avatar:</DialogTitle>
+            <DialogContent>
+              <DialogTitle>Username:</DialogTitle>
+              <ColorTextField
+                id="username"
+                label="Username"
+                type="text"
+                color="primary"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                fullWidth
+              />
+            </DialogContent>
 
             <DialogContent>
+              <DialogTitle>Personal avatar:</DialogTitle>
               <ButtonGroup
                 color="primary"
                 aria-label="outlined primary button group"
@@ -465,6 +556,41 @@ export default () => {
               )}
             </DialogContent>
 
+            <DialogContent>
+              <DialogTitle>Language:</DialogTitle>
+              <ColorAutocomplete
+                options={Object.keys(locales)}
+                getOptionLabel={(key) =>
+                  `${key.substring(0, 2)}-${key.substring(2, 4)}`
+                }
+                style={{ width: 300 }}
+                value={locale}
+                disableClearable
+                onChange={(event, newValue) => {
+                  setLocale(newValue);
+                }}
+                renderInput={(params) => (
+                  <ColorTextField {...params} label="Language" fullWidth />
+                )}
+              />
+            </DialogContent>
+
+            <DialogContent>
+              <DialogTitle>Theme:</DialogTitle>
+              <FormControlLabel
+                control={
+                  <ColorSwitch
+                    checked={darkTheme}
+                    onClick={() => {
+                      darkTheme ? setDarkTheme(false) : setDarkTheme(true);
+                    }}
+                    name="darktheme"
+                  />
+                }
+                label="Dark Theme"
+                labelPlacement="start"
+              />
+            </DialogContent>
             <DialogActions>
               <Button
                 onClick={() => {

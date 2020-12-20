@@ -15,7 +15,7 @@ app.use(require("body-parser").json());
 app.use(cors({ credentials: true, origin: true }));
 app.options("*", cors({ credentials: true, origin: true })); // include before other routes
 
-app.get("/", authenticate, (req, res) => {
+app.get("/", (req, res) => {
   res.send(["<h1>ECE DevOps Chat</h1>"].join(""));
 });
 
@@ -124,7 +124,7 @@ app.get("/users", async (req, res) => {
 
 app.get("/users", authenticate, async (req, res) => {
   const users = await db.users.list();
-  res.json(users);
+  res.status(200).json(users);
 });
 
 /* post users => db create user */
@@ -135,12 +135,12 @@ app.post("/users", authenticate, async (req, res) => {
 
 app.get("/users/:id", authenticate, async (req, res) => {
   const user = await db.users.get(req.params.id);
-  res.json(user);
+  res.status(200).json(user);
 });
 
 app.put("/users/:id", authenticate, async (req, res) => {
   const user = await db.users.update(req.body);
-  res.json(user);
+  res.status(201).json(user);
 });
 
 module.exports = app;

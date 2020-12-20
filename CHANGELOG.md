@@ -36,7 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Appropriate HTTP response codes and messages for each case
 - Settings Dialog
 - Setting up a gravatar
-- Random default username generated from https://randomuser.me/ API when logging for the first time
+- Random username generated from https://randomuser.me/ API when logging for the first time
+- Updating username in settings
+- Choosing language between every available locales with autocomplete
+- Dark Theme switch (light theme not implemented)
+- Settings updates are persisted in DB
 
 ### Fixed
 
