@@ -10,17 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### To fix
 
-- Messages always posted as david no matter who posted them
-- Rendering problems on channels with enough messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
-- First time logging with Dex is not working
-- Form is not autofocused when entering a channel
-- Enter key in message form does not send but put new line
-- Messages date is always the one of the last message
+- Rendering problems on channels with too many messages (part of header disappear, title is not shown when scrolling down, form is not shown when scrollling up)
+- First time logging with Dex is sometimes not working
 - No error message when trying to load an invalid channel ID
-- Load new channel after refresh when creating a channel
-
-- Messages infos (missing avatar, wrong name because of posting as david, ugly date)
-- Scroling hide channel info & form
+- Should load new channel after refresh when created a new channel
 
 ### Added
 
@@ -49,6 +42,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - invited users don't show among selected / unselected ones
 - User creating a channel (future owner) is not shown among users to invite when creating channel
 - Unable to reload page when on a channel
+- Messages always posted as david no matter who posted them
+- Enter key in message form does not send but put new line
+- Messages date is always the one of the last message
 
 ## [1.0.0](https://github.com/benzinho75/node-messenger/compare/v0.0.6...v1.0.0) - 2020-12-07
 

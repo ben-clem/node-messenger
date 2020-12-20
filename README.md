@@ -160,6 +160,7 @@ _How to start and use the application, run the tests, ..._
 - Gravatar integration
 
   - User can choose to use Gravatar in the settings dialog.
+  - **MISSING:** Gravatars should be displayed (channel creation, member invite, messages)
 
 - Avatar selection
 
