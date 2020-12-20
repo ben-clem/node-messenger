@@ -1,6 +1,6 @@
 {
   "name": "webtech-front-end",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "WebTech front-end demo lab",
   "private": true,
   "dependencies": {
