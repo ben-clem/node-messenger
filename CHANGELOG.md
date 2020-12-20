@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Choosing language between every available locales with autocomplete
 - Dark Theme switch (light theme not implemented)
 - Settings updates are persisted in DB
+- Message modification (modify dialog + messages put route + mesages update in DB)
 
 ### Fixed
 

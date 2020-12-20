@@ -55,6 +55,8 @@ const ColorTextField = withStyles((theme) => ({
   },
 }))(TextField);
 
+
+
 export default ({ addMessage, channel }) => {
   const styles = useStyles(useTheme());
 

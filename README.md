@@ -142,7 +142,7 @@ _How to start and use the application, run the tests, ..._
 
 - Message modification
 
-  - **MISSING:** The author of a message is able to modify its content
+  - The author of a message is able to modify its content (modify dialog, messages put route, mesages update in DB)
 
 - Message removal
 

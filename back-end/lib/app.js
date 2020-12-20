@@ -111,6 +111,11 @@ app.post("/channels/:id/messages", authenticate, async (req, res) => {
   }
 });
 
+app.put("/channels/:id/messages", authenticate, async (req, res) => {
+  const user = await db.messages.update(req.params.id, req.body);
+  res.status(201).json(user);
+});
+
 ///////////
 // Users //
 ///////////
