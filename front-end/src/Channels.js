@@ -12,16 +12,18 @@ const styles = {
   //   minWidth: '200px',
   // },
   channel: {
-    padding: ".5rem .2rem .0rem .5rem",
+    
     whiteSpace: "nowrap",
-    fontSize: "115%",
   },
 };
 
 const ColorLink = withStyles((theme) => ({
   root: {
-    color: "rgb(20, 120, 255)",
+    color: "rgb(75, 95, 195)",
     cursor: "pointer",
+    fontWeight: "500",
+    fontSize: "110%",
+    padding: ".5rem .0rem .0rem .5rem",
   },
 }))(Link);
 

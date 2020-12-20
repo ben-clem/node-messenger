@@ -8,7 +8,8 @@ import Button from "@material-ui/core/Button";
 // import Icon from "@material-ui/core/Icon"
 import SendIcon from "@material-ui/icons/Send";
 import TextField from "@material-ui/core/TextField";
-import { useTheme } from "@material-ui/core/styles";
+import { useTheme, withStyles } from "@material-ui/core/styles";
+import { orange } from "@material-ui/core/colors";
 
 const useStyles = (theme) => {
   // See https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/OutlinedInput/OutlinedInput.js
@@ -28,18 +29,38 @@ const useStyles = (theme) => {
         marginRight: theme.spacing(1),
       },
     },
-    send: {},
+    sendContainer: {
+      display: "flex",
+      flexDirection: "column",
+    },
+    send: {
+      flex: "1 1 auto",
+    },
   };
 };
 
-export default ({ addMessage, channel }) => {
+const ColorTextField = withStyles((theme) => ({
+  root: {
+    "& label.Mui-focused": {
+      color: orange[500],
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: orange[500],
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-focused fieldset": {
+        borderColor: orange[500],
+      },
+    },
+  },
+}))(TextField);
 
+export default ({ addMessage, channel }) => {
   const styles = useStyles(useTheme());
 
   const { oauth } = useContext(Context);
 
   const [content, setContent] = useState("");
-  
 
   const onSubmit = async () => {
     const { data: message } = await axios.post(
@@ -50,9 +71,9 @@ export default ({ addMessage, channel }) => {
       },
       {
         headers: {
-          'Authorization': `Bearer ${oauth.access_token}`,
-          'email': oauth.email
-        }
+          Authorization: `Bearer ${oauth.access_token}`,
+          email: oauth.email,
+        },
       }
     );
     addMessage(message);
@@ -62,24 +83,32 @@ export default ({ addMessage, channel }) => {
     setContent(e.target.value);
   };
   return (
-    <form css={styles.form} onSubmit={onSubmit} noValidate>
-      <TextField
+    <form
+      css={styles.form}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <ColorTextField
+        autoFocus
         id="outlined-multiline-flexible"
         label="Message"
-        multiline
+        /* multiline */
         rowsMax={4}
         value={content}
         onChange={handleChange}
         variant="outlined"
         css={styles.content}
+        required
       />
-      <div>
+      <div css={styles.sendContainer}>
         <Button
+          type="submit"
           variant="contained"
           color="primary"
           css={styles.send}
           endIcon={<SendIcon />}
-          onClick={onSubmit}
         >
           Send
         </Button>
