@@ -211,6 +211,7 @@ export default ({ onUser }) => {
                 email: fetchOauth.email,
                 username: random.results[0].login.username,
                 avatarChoice: 1,
+                avatarSelected: 6,
                 locale: "enUS",
                 darktheme: true,
               },

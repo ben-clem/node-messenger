@@ -32,6 +32,8 @@ import * as locales from "@material-ui/core/locale";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
 
 const useStyles = (theme) => ({
   root: {
@@ -76,6 +78,13 @@ const BorderColorButton = withStyles((theme) => ({
     "&:hover": {
       backgroundColor: orange[700],
     },
+  },
+}))(Button);
+
+const BorderColorButton2 = withStyles((theme) => ({
+  root: {
+    color: "white",
+    borderColor: orange[500],
   },
 }))(Button);
 
@@ -154,6 +163,7 @@ export default () => {
   const [currentUser, setCurrentUser] = useState({});
   const [username, setUsername] = useState("username");
   const [avatarButtonSelected, setAvatarButtonSelected] = useState(1); // 1: Gravatar, 2: selected avatar, 3: custom avatar
+  const [avatarSelected, setAvatarSelected] = useState(0); // 1 to 6
   const [locale, setLocale] = useState("enUS");
   const [darkTheme, setDarkTheme] = useState(true);
 
@@ -426,6 +436,7 @@ export default () => {
           onEnter={() => {
             setUsername(currentUser.username);
             setAvatarButtonSelected(currentUser.avatarChoice);
+            setAvatarSelected(currentUser.avatarSelected);
             setLocale(currentUser.locale);
             setDarkTheme(currentUser.darkTheme);
           }}
@@ -445,6 +456,7 @@ export default () => {
                 username: username,
                 id: currentUser.id,
                 avatarChoice: avatarButtonSelected,
+                avatarSelected: avatarSelected,
                 locale: locale,
                 darkTheme: darkTheme,
               };
@@ -553,6 +565,79 @@ export default () => {
                     style={{ marginLeft: "10px", marginTop: "5px" }}
                   />
                 </div>
+              )}
+              {avatarButtonSelected === 2 && ( // Select from list
+                <div>
+                  <br></br>
+                  <GridList cols={6}>
+                    <BorderColorButton2
+                      variant={avatarSelected === 1 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(1);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/avatar.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                    <BorderColorButton2
+                      variant={avatarSelected === 2 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(2);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/jake.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                    <BorderColorButton2
+                      variant={avatarSelected === 3 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(3);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/futurama-bender.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                    <BorderColorButton2
+                      variant={avatarSelected === 4 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(4);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/super-mario.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                    <BorderColorButton2
+                      variant={avatarSelected === 5 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(5);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/fortnite-llama.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                    <BorderColorButton2
+                      variant={avatarSelected === 6 ? "outlined" : "default"}
+                      onClick={() => {
+                        setAvatarSelected(6);
+                      }}
+                    >
+                      <GridListTile>
+                        <img src="https://img.icons8.com/officel/80/000000/anonymous-mask.png" />
+                      </GridListTile>
+                    </BorderColorButton2>
+                  </GridList>
+                </div>
+              )}
+              {avatarButtonSelected === 3 && ( // Upload avatar
+                <DialogContentText>
+                  <br></br>
+                  WIP
+                </DialogContentText>
               )}
             </DialogContent>
 

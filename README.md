@@ -159,12 +159,13 @@ _How to start and use the application, run the tests, ..._
 
 - Gravatar integration
 
-  - User can choose to use Gravatar in the settings dialog.
+  - User can choose to use Gravatar in the settings dialog and his choice is saved in DB.
   - **MISSING:** Gravatars should be displayed (channel creation, member invite, messages)
 
 - Avatar selection
 
-  - **MISSING:** Provide the user with the possibility to choose an avatar from a selection you provide. The screen presenting this selection can be proposed once the user logged in for the first time (when the user account was not yet present inside the database and was created) or when the user edits his/her settings.
+  - User can choose from a list of provided avatars in the settings section and his choice is saved in DB.
+  - **MISSING:** Avatars should be displayed (channel creation, member invite, messages)
 
 - Personal custom avatar
 

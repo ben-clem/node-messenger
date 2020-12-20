@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Settings updates are persisted in DB
 - Message modification (modify dialog, messages put route, update in DB)
 - Message deletion (delete dialog, messages delete route, update in DB)
+- Avatar selection from a list of provided ones
 
 ### Fixed
 
