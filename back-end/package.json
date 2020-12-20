@@ -1,6 +1,6 @@
 {
   "name": "webtech-back-end",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "WebTech back-end demo lab",
   "author": "david worms <david@adaltas.com>",
   "dependencies": {
