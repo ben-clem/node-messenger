@@ -1,6 +1,6 @@
 # Node Messenger
 
-Adaltas [webtech course](https://github.com/adaltas/ece-2020-fall-webtech) project.
+Adaltas [webtech course](https://github.com/adaltas/ece-webtech-2022-spring) project.
 
 The goal of this project is to build a basic messaging web app.<br>
 It leverages Node.js and React as well as complementary technologies such as unit testing with Mocha and Should.js, embeded storage with LevelDB, REST APIs, ...<br>
